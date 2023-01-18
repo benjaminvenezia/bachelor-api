@@ -27,11 +27,9 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        //coming from the trait.
         return $this->success([
             'user' => $user,
-            'token' => $user->createtoken('API token of ' . $user->name)->plainTextToken,
-
+            'token' => $user->createToken('API Token of ' . $user->name)->plainTextToken
         ]);
     }
 
