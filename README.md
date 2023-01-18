@@ -5,3 +5,4 @@
 [package] : packages
 [fix] : fix an error
 [func] : add a functionnality
+[doc] : documentation adding
