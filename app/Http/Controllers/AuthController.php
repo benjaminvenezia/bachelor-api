@@ -13,4 +13,9 @@ class AuthController extends Controller
     {
         return 'This is my login method';
     }
+
+    public function register()
+    {
+        return response()->json('This is my register method');
+    }
 }
