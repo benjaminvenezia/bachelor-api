@@ -20,8 +20,6 @@ class TasksResource extends JsonResource
                 'name' => $this->name,
                 'description' => $this->description,
                 'priority' => $this->priority,
-                'created_at' => $this->created_at,
-                'updated_at' => $this->updated_at,
                 'userId' => $this->user_id
             ],
             'relationships' => [
