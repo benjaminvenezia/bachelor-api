@@ -21,7 +21,6 @@ class TaskFactory extends Factory
             'user_id' => User::all()->random()->id,
             'name' => $this->faker->unique()->sentence(),
             'description' => $this->faker->text(),
-            'priority' => $this->faker->randomElement(['low', 'medium', 'high'])
         ];
     }
 }

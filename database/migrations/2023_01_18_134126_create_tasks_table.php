@@ -16,9 +16,12 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('category');
             $table->string('name');
             $table->string('description');
-            $table->string('priority')->default('medium');
+            $table->integer('reward');
+            $table->boolean('isDone');
+            $table->string('associated_day');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
