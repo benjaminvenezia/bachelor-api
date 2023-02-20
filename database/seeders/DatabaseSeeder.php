@@ -19,23 +19,24 @@ class DatabaseSeeder extends Seeder
     {
 
 
-
-        DB::table('users')->insert(
+        $usersToAdd = [
             [
                 'id' => 1,
                 'name' => "Thierry",
                 'email' => "thierry@gmail.com",
                 'password' => "thiethie12",
+            ],
+            [
+                'id' => 2,
+                'name' => "Marjorie",
+                'email' => "Marjorie@gmail.com",
+                'password' => "marjo12",
+
             ]
-        );
+        ];
 
-        DB::table('users')->insert([
-            'id' => 2,
-            'name' => "Marjorie",
-            'email' => "Marjorie@gmail.com",
-            'password' => "marjo12",
+        DB::table('users')->insert($usersToAdd);
 
-        ]);
 
         DB::table('group')->insert(
             [
@@ -45,15 +46,31 @@ class DatabaseSeeder extends Seeder
                 'user_id2' => 2,
             ]
         );
-        DB::table('tasks')->insert([
-            'id' => 2,
-            'user_id' => 1,
-            'category' => 'kitchen',
-            'name' => "faire à manger",
-            'description' => "Vous devez préparer le repas.",
-            'reward' => 12,
-            'isDone' => false,
-            'associated_day' => 'lun',
-        ]);
+
+        $tasksToAdd = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'category' => 'kitchen',
+                'name' => "faire à manger",
+                'description' => "Vous devez préparer le repas.",
+                'reward' => 12,
+                'isDone' => false,
+                'associated_day' => 'lun',
+            ],
+            [
+                'id' => 2,
+                'user_id' => 1,
+                'category' => 'kitchen',
+                'name' => "nettoyer la table",
+                'description' => "il faut nettoyer la table.",
+                'reward' => 20,
+                'isDone' => false,
+                'associated_day' => 'lun',
+            ]
+        ];
+
+
+        DB::table('tasks')->insert($tasksToAdd);
     }
 }
