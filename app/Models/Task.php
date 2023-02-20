@@ -12,21 +12,12 @@ class Task extends Model
     protected $fillable = [
         'user_id',
         'category',
-        'name',
+        'title',
         'description',
         'reward',
         'isDone',
         'associated_day',
     ];
-
-    // 'id' => 2,
-    // 'user_id' => 1,
-    // 'category' => 'kitchen',
-    // 'name' => "faire à manger",
-    // 'description' => "Vous devez préparer le repas.",
-    // 'reward' => 12,
-    // 'isDone' => false,
-    // 'associated_day' => 'lun',
 
     public function user()
     {

@@ -16,17 +16,15 @@ class TasksResource extends JsonResource
     {
         return [
             'id' => (string)$this->id,
-            'attributes' => [
-                'name' => $this->name,
-                'description' => $this->description,
-                'priority' => $this->priority,
-                'userId' => $this->user_id
-            ],
-            'relationships' => [
-                'id' => (string)$this->user->id,
-                'user name' => $this->user->name,
-                'user email' => $this->user->email,
-            ]
+            'title' => $this->title,
+            'description' => $this->description,
+            'category' => $this->category,
+            'reward' => $this->reward,
+            'isDone' => $this->isDone,
+            'associatedDay' => $this->associated_day,
+            'userId' => $this->user_id,
+            'user name' => $this->user->name,
+            'user email' => $this->user->email,
         ];
     }
 }

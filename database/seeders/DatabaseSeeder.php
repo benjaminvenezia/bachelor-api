@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-
         $usersToAdd = [
             [
                 'id' => 1,
@@ -52,21 +51,31 @@ class DatabaseSeeder extends Seeder
                 'id' => 1,
                 'user_id' => 1,
                 'category' => 'kitchen',
-                'name' => "faire à manger",
+                'title' => "faire à manger",
                 'description' => "Vous devez préparer le repas.",
                 'reward' => 12,
                 'isDone' => false,
-                'associated_day' => 'lun',
+                'associated_day' => 'Lun',
             ],
             [
                 'id' => 2,
                 'user_id' => 1,
                 'category' => 'kitchen',
-                'name' => "nettoyer la table",
+                'title' => "nettoyer la table",
                 'description' => "il faut nettoyer la table.",
                 'reward' => 20,
                 'isDone' => false,
-                'associated_day' => 'lun',
+                'associated_day' => 'Lun',
+            ],
+            [
+                'id' => 3,
+                'user_id' => 1,
+                'category' => 'kitchen',
+                'title' => "nettoyer la table",
+                'description' => "il faut nettoyer la table ben.",
+                'reward' => 10,
+                'isDone' => false,
+                'associated_day' => 'Lun',
             ]
         ];
 

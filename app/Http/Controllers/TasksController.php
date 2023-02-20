@@ -37,9 +37,12 @@ class TasksController extends Controller
 
         $task = Task::create([
             'user_id' => Auth::user()->id,
-            'name' => $request->name,
+            'title' => $request->title,
             'description' => $request->description,
-            'priority' => $request->priority
+            'category' => $request->category,
+            'reward' => $request->reward,
+            'isDone' => $request->isDone,
+            'associated_day' => $request->associated_day
         ]);
 
         return new TasksResource($task);
