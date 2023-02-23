@@ -19,10 +19,12 @@ class TasksController extends Controller
      */
     public function index()
     {
+        $tasks =  TasksResource::collection(
+            Task::where('user_id', Auth::user()->id)->get(),
 
-        return TasksResource::collection(
-            Task::where('user_id', Auth::user()->id)->get()
         );
+
+        return $tasks;
     }
 
     /**
@@ -35,7 +37,12 @@ class TasksController extends Controller
     {
         $request->validated($request->all());
 
+        //log
+        // $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        // $output->writeln($request->id);
+
         $task = Task::create([
+            'id' => $request->id,
             'user_id' => Auth::user()->id,
             'title' => $request->title,
             'description' => $request->description,
