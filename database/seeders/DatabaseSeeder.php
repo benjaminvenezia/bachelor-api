@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ]
         ];
 
-        DB::table('users')->insert($usersToAdd);
+        // DB::table('users')->insert($usersToAdd);
 
 
         DB::table('group')->insert(
@@ -80,6 +80,6 @@ class DatabaseSeeder extends Seeder
         ];
 
 
-        DB::table('tasks')->insert($tasksToAdd);
+        // DB::table('tasks')->insert($tasksToAdd);
     }
 }
