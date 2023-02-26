@@ -30,7 +30,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        // 'personalCode' => strval(bin2hex(random_bytes(5))),
         'otherCode' => ''
     ];
 
