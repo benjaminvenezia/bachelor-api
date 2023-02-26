@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class TasksController extends Controller
 {
     use HttpResponses;
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +22,6 @@ class TasksController extends Controller
     {
         $tasks =  TasksResource::collection(
             Task::where('user_id', Auth::user()->id)->get(),
-
         );
 
         return $tasks;
