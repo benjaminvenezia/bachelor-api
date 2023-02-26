@@ -13,12 +13,24 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * Setup the personal code when creating the user.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->personalCode = strval(bin2hex(random_bytes(5)));
+        });
+    }
+
+    /**
      * The model's default values for attributes.
      *
      * @var array
      */
     protected $attributes = [
-        'personalCode' => 'Default Code',
+        // 'personalCode' => strval(bin2hex(random_bytes(5))),
         'otherCode' => ''
     ];
 
