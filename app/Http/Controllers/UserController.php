@@ -24,6 +24,20 @@ class UserController extends Controller
     }
 
     /**
+     * Find an user by our otherCode value
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findUserByCode(Request $request, $code)
+    {
+
+        // $partner = User::where('personalCode', $request->email)->first();
+        $partner = User::where('personalCode', $code)->first();
+
+        return $partner;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
