@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -17,9 +18,9 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
-    Route::get('/users/group/{code}', [UserController::class, 'setGroup']);
-    Route::get('/users/setGroup', [UserController::class, 'setGroup']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/tasks', TasksController::class);
     Route::resource('/users', UserController::class);
+
+    Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
 });
