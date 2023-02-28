@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +46,14 @@ class UserController extends Controller
      */
     public function setGroup(Request $request, $idPartner)
     {
-
+        $group = new Group();
         $userId = Auth::user()->id;
 
+        $group->user_id1 = $userId;
+        $group->user_id2 = $idPartner;
+        $group->name = "Les petits nettoyeurs";
 
-
-        return '';
+        $group->save();
     }
 
     /**
