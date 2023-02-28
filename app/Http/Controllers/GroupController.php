@@ -23,5 +23,9 @@ class GroupController extends Controller
         $group->name = "Les petits nettoyeurs";
 
         $group->save();
+
+        return response()->json([
+            'message' => 'Groupe crée avec succès!',
+        ]);
     }
 }
