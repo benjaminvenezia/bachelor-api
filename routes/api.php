@@ -17,6 +17,7 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
+    Route::get('/users/group/{code}', [UserController::class, 'setGroup']);
     Route::get('/users/setGroup', [UserController::class, 'setGroup']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/tasks', TasksController::class);

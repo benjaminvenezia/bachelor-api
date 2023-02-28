@@ -38,24 +38,6 @@ class UserController extends Controller
         return $partner;
     }
 
-
-    /**
-     * Create a group with the two user
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function setGroup(Request $request, $idPartner)
-    {
-        $group = new Group();
-        $userId = Auth::user()->id;
-
-        $group->user_id1 = $userId;
-        $group->user_id2 = $idPartner;
-        $group->name = "Les petits nettoyeurs";
-
-        $group->save();
-    }
-
     /**
      * Update the specified resource in storage.
      *
