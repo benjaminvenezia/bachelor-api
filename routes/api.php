@@ -17,11 +17,13 @@ Route::post('/register', [AuthController::class, 'register']);
 
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
     Route::resource('/tasks', TasksController::class);
+
     Route::resource('/users', UserController::class);
 
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
+
     Route::get('/group/test', [GroupController::class, 'getTheCurrentUserGroup']);
 });

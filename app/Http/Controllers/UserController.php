@@ -43,6 +43,7 @@ class UserController extends Controller
         return $partner;
     }
 
+
     /**
      * Update the specified resource in storage.
      *
