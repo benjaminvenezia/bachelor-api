@@ -15,9 +15,15 @@ class GroupController extends Controller
      */
     public function setGroup(Request $request, $idPartner)
     {
-        $group = new Group();
         $userId = Auth::user()->id;
 
+        if (Group::where('user_id1', '=', $userId)->count() > 0 || Group::where('user_id2', '=', $idPartner)->count() > 0) {
+            return response()->json([
+                'message' => 'Erreur, un group avec cet identifiant existe déjà!',
+            ]);
+        }
+
+        $group = new Group();
         $group->user_id1 = $userId;
         $group->user_id2 = $idPartner;
         $group->name = "Les petits nettoyeurs";
