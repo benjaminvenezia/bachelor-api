@@ -33,6 +33,7 @@ class UserController extends Controller
     {
         if (User::where('personalCode', '=', $code)->count() === 0) {
             return response()->json([
+                'code' => 403,
                 'message' => 'Erreur, ce code est rattaché a aucun utilisateur.',
             ]);
         }

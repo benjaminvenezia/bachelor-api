@@ -23,4 +23,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/users', UserController::class);
 
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
+    Route::get('/group/test', [GroupController::class, 'getTheCurrentUserGroup']);
 });
