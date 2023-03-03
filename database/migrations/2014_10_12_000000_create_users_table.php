@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('personalCode')->unique();
             $table->string('otherCode');
             $table->string('name');
+            $table->integer('points');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

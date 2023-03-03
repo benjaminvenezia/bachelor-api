@@ -30,7 +30,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        'otherCode' => ''
+        'otherCode' => '',
+        'points' => 0
     ];
 
 
@@ -42,6 +43,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'points',
         'password',
         'otherCode',
     ];
