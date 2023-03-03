@@ -17,11 +17,20 @@ class GroupController extends Controller
     {
         $userId = Auth::user()->id;
 
+
         if (Group::where('user_id1', '=', $userId)->count() > 0 || Group::where('user_id2', '=', $idPartner)->count() > 0) {
             return response()->json([
                 'message' => 'Erreur, un group avec cet identifiant existe déjà!',
             ]);
         }
+
+        if ($idPartner == $userId) {
+            return response()->json([
+                'message' => 'Vous ne pouvez composer un group avec vous même.',
+            ]);
+        }
+
+
 
         $group = new Group();
         $group->user_id1 = $userId;
