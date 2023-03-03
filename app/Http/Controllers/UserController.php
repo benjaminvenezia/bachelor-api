@@ -31,8 +31,12 @@ class UserController extends Controller
      */
     public function findUserByCode(Request $request, $code)
     {
+        if (User::where('personalCode', '=', $code)->count() === 0) {
+            return response()->json([
+                'message' => 'Erreur, ce code est rattaché a aucun utilisateur.',
+            ]);
+        }
 
-        // $partner = User::where('personalCode', $request->email)->first();
         $partner = User::where('personalCode', $code)->first();
 
         return $partner;
