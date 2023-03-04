@@ -19,11 +19,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
+
     Route::resource('/tasks', TasksController::class);
 
     Route::resource('/users', UserController::class);
 
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
 
-    Route::get('/group/test', [GroupController::class, 'getTheCurrentUserGroup']);
+    Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 });
