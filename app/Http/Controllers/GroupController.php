@@ -21,6 +21,12 @@ class GroupController extends Controller
             Group::where('user_id1', Auth::user()->id)->get(),
         );
 
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
+        }
+
         return $group;
     }
 
