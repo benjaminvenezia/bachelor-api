@@ -23,9 +23,10 @@ return new class extends Migration
             $table->integer('reward');
             $table->boolean('isDone');
             $table->string('associated_day');
-            $table->foreign('user_id')
+
+            $table->foreign('group_id')
                 ->references('id')
-                ->on('users')
+                ->on('groups')
                 ->onDelete('cascade');
             $table->timestamps();
         });
