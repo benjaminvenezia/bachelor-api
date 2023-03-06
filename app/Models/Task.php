@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Task extends Model
 {
@@ -25,6 +26,7 @@ class Task extends Model
 
     protected $fillable = [
         'id',
+        'group_id',
         'user_id',
         'category',
         'title',
@@ -34,8 +36,8 @@ class Task extends Model
         'associated_day',
     ];
 
-    public function user()
+    public function group(): HasOne
     {
-        return $this->belongsTo(Group::class);
+        return $this->hasOne(Group::class);
     }
 }

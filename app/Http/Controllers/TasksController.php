@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Resources\TasksResource;
+use App\Models\Group;
 use App\Models\Task;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -20,11 +21,15 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks =  TasksResource::collection(
-            Task::where('user_id', Auth::user()->id)->get(),
-        );
 
-        return $tasks;
+        // $tasks =  TasksResource::collection(
+        //     Task::where('group_id', Auth::user()->group)->get(),
+        // );
+
+        //return Task::where('group_id', Auth::user()->group->id)->get();
+
+        // $group = Task::find(1)->group_id;
+        // return $group;
     }
 
     /**
@@ -36,10 +41,6 @@ class TasksController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $request->validated($request->all());
-
-        //log
-        // $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-        // $output->writeln($request->id);
 
         $task = Task::create([
             'id' => $request->id,
