@@ -32,6 +32,8 @@ class GroupResource extends JsonResource
             'idUser2' => $user2[0]->id,
             'user1Points' => $user1[0]->points,
             'user2Points' => $user2[0]->points,
+            'user1Name' => $user1[0]->name,
+            'user2Name' => $user2[0]->name,
             'delta' => $delta,
             'winner' => $winner,
             'looser' => $looser
