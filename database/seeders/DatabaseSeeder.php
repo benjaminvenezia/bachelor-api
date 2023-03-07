@@ -107,6 +107,16 @@ class DatabaseSeeder extends Seeder
                 'reward' => 10,
                 'isDone' => false,
                 'associated_day' => 'Lun',
+            ],
+            [
+                'id' => 4,
+                'group_id' => 2,
+                'category' => 'kitchen',
+                'title' => "Test",
+                'description' => "il faut nettoyer.",
+                'reward' => 10,
+                'isDone' => false,
+                'associated_day' => 'Lun',
             ]
         ];
 

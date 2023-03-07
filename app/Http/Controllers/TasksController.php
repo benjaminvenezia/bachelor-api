@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Resources\GroupResource;
 use App\Http\Resources\TasksResource;
 use App\Models\Group;
 use App\Models\Task;
@@ -16,20 +17,26 @@ class TasksController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * Retourne toutes les tâches pour le groupe actuel
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        $group =  GroupResource::collection(
+            Group::where('user_id1', Auth::user()->id)->get(),
+        );
 
-        // $tasks =  TasksResource::collection(
-        //     Task::where('group_id', Auth::user()->group)->get(),
-        // );
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
+        }
 
-        //return Task::where('group_id', Auth::user()->group->id)->get();
+        $tasks = TasksResource::collection(
+            Task::where('group_id', $group[0]->id)->get(),
+        );
 
-        // $group = Task::find(1)->group_id;
-        // return $group;
+        return $tasks;
     }
 
     /**
