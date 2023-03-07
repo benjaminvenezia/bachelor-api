@@ -16,13 +16,13 @@ class TasksController extends Controller
     use HttpResponses;
 
     /**
-     * Display a listing of the resource.
-     * Retourne toutes les tâches pour le groupe actuel
-     * @return \Illuminate\Http\Response
+     * Return the id of the current user Group.
+     *
+     * @return void
      */
-    public function index()
+    public function getCurrentGroupId(): int|string
     {
-        $group =  GroupResource::collection(
+        $group = GroupResource::collection(
             Group::where('user_id1', Auth::user()->id)->get(),
         );
 
@@ -32,8 +32,21 @@ class TasksController extends Controller
             );
         }
 
+        return $group[0]->id;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     * Retourne toutes les tâches pour le groupe actuel
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $groupId = $this->getCurrentGroupId();
+
         $tasks = TasksResource::collection(
-            Task::where('group_id', $group[0]->id)->get(),
+            Task::where('group_id', $groupId)->get(),
         );
 
         return $tasks;
@@ -72,17 +85,9 @@ class TasksController extends Controller
     public function show(Task $task)
     {
 
-        $group =  GroupResource::collection(
-            Group::where('user_id1', Auth::user()->id)->get(),
-        );
+        $groupId = $this->getCurrentGroupId();
 
-        if (count($group) == 0) {
-            $group =  GroupResource::collection(
-                Group::where('user_id2', Auth::user()->id)->get(),
-            );
-        }
-
-        if ($group[0]->id === $task->group_id) {
+        if ($groupId === $task->group_id) {
             return $task;
         } else {
             return $this->isNotAuthorized($task);
