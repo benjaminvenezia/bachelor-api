@@ -105,22 +105,13 @@ class TasksController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        $group =  GroupResource::collection(
-            Group::where('user_id1', Auth::user()->id)->get(),
-        );
+        $groupId = $this->getCurrentGroupId();
 
-        if (count($group) == 0) {
-            $group =  GroupResource::collection(
-                Group::where('user_id2', Auth::user()->id)->get(),
-            );
-        }
-
-        if ($group[0]->id === $task->group_id) {
+        if ($groupId === $task->group_id) {
             $task->update($request->all());
 
             return new TasksResource($task);
         } else {
-
             return $this->error('', 'You are not authorized to make this request', 403);
         }
     }
@@ -133,7 +124,15 @@ class TasksController extends Controller
      */
     public function destroy(Task $task)
     {
-        return $this->isNotAuthorized($task) ? $this->isNotAuthorized($task) : $task->delete();
+        $groupId = $this->getCurrentGroupId();
+
+        if ($groupId === $task->group_id) {
+            $task->delete();
+
+            return new TasksResource($task);
+        } else {
+            return $this->error('', 'You are not authorized to make this request', 403);
+        }
     }
 
     private function isNotAuthorized($task)
