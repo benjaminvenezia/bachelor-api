@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user->otherCode === "") {
+        if (Auth::user()->otherCode === "") {
             return $this->error('', 'You need to link with your partner before accessing the homepage.', 401);
         }
 
