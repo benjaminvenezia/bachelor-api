@@ -71,7 +71,23 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        return $this->isNotAuthorized($task) ? $this->isNotAuthorized($task) : new TasksResource($task);
+
+        $group =  GroupResource::collection(
+            Group::where('user_id1', Auth::user()->id)->get(),
+        );
+
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
+        }
+
+        if ($group[0]->id === $task->group_id) {
+            return $task;
+        } else {
+            return $this->isNotAuthorized($task);
+        }
+
         //$task = Task::find($id); pas nécessaire cf shortcut. :)
     }
 

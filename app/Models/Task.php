@@ -11,6 +11,15 @@ class Task extends Model
     use HasFactory;
 
     /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'group_id' => 1
+    ];
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
@@ -27,7 +36,7 @@ class Task extends Model
     protected $fillable = [
         'id',
         'group_id',
-        'user_id',
+        // 'user_id',
         'category',
         'title',
         'description',
