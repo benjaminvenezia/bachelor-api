@@ -100,13 +100,24 @@ class TasksController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        if (Auth::user()->id !== $task->user_id) {
-            return $this->error('', 'You are not authorized to make this request', 403);
+        $group =  GroupResource::collection(
+            Group::where('user_id1', Auth::user()->id)->get(),
+        );
+
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
         }
 
-        $task->update($request->all());
+        if ($group[0]->id === $task->group_id) {
+            $task->update($request->all());
 
-        return new TasksResource($task);
+            return new TasksResource($task);
+        } else {
+
+            return $this->error('', 'You are not authorized to make this request', 403);
+        }
     }
 
     /**
