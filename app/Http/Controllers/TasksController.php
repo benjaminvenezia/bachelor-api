@@ -62,8 +62,11 @@ class TasksController extends Controller
     {
         $request->validated($request->all());
 
+        $groupId = $this->getCurrentGroupId();
+
         $task = Task::create([
             'id' => $request->id,
+            'group_id' => $groupId,
             'user_id' => Auth::user()->id,
             'title' => $request->title,
             'description' => $request->description,

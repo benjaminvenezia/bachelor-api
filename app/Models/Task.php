@@ -15,9 +15,9 @@ class Task extends Model
      *
      * @var array
      */
-    protected $attributes = [
-        'group_id' => 1
-    ];
+    // protected $attributes = [
+    //     'group_id' => Auth::user()->group
+    // ];
 
     /**
      * The primary key associated with the table.
