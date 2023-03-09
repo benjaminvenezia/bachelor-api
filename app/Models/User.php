@@ -68,11 +68,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Get the group associated with the user.
-     */
     public function group(): HasOne
     {
         return $this->hasOne(Group::class);
+    }
+
+    public function gages()
+    {
+        return $this->hasMany(Gage::class);
     }
 }

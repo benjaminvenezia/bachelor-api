@@ -15,7 +15,20 @@ return new class extends Migration
     {
         Schema::create('gages', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->string('category');
+            $table->boolean('is_done');
+            $table->string('date_string');
+            $table->unsignedSmallInteger('day');
+            $table->unsignedSmallInteger('month');
+            $table->unsignedSmallInteger('year');
+            $table->unsignedInteger('timestamp');
             $table->timestamps();
+
+            // Ajouter une colonne user_id pour la clé étrangère
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

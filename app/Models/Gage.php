@@ -9,17 +9,6 @@ class Gage extends Model
 {
     use HasFactory;
 
-
-    //     title: string;
-    //   description: string;
-    //   category: string;
-    //   isDone: boolean;
-    //   dateString: string;
-    //   day: number;
-    //   month: number;
-    //   year: number;
-    //   timestamp: number;
-
     /**
      * The primary key associated with the table.
      *
@@ -28,9 +17,19 @@ class Gage extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id',
-        'name',
-        'user_id1',
-        'user_id2',
+        'title',
+        'description',
+        'category',
+        'isDone',
+        'dateString',
+        'day',
+        'month',
+        'year',
+        'timestamp',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
