@@ -88,15 +88,17 @@ class TasksController extends Controller
     public function show(Task $task)
     {
 
-        $groupId = $this->getCurrentGroupId();
+        try {
+            $groupId = $this->getCurrentGroupId();
 
-        if ($groupId === $task->group_id) {
-            return $task;
-        } else {
-            return $this->isNotAuthorized($task);
+            if ($groupId === $task->group_id) {
+                return $task;
+            } else {
+                return $this->isNotAuthorized($task);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
-
-        //$task = Task::find($id); pas nécessaire cf shortcut. :)
     }
 
     /**
