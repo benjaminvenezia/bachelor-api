@@ -24,6 +24,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        if (Auth::user()->otherCode === "") {
+            return $this->error('', 'You need to link with your partner before accessing the homepage.', 401);
+        }
+
         return $this->success([
             'user' => $user,
             'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken

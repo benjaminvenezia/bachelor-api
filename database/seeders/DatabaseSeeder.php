@@ -22,34 +22,65 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => "Thierry",
-                'email' => "thierry@gmail.com",
-                'password' => "thiethie12",
+                'personalCode' => 'aaa',
+                'otherCode' => 'bbb',
+                'email' => "ben@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
             ],
             [
                 'id' => 2,
                 'name' => "Marjorie",
-                'email' => "Marjorie@gmail.com",
-                'password' => "marjo12",
-
+                'personalCode' => 'bbb',
+                'otherCode' => 'aaa',
+                'email' => "noemi@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ],
+            [
+                'id' => 3,
+                'name' => "Armand",
+                'personalCode' => 'ccc',
+                'otherCode' => 'ddd',
+                'email' => "armand@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ],
+            [
+                'id' => 4,
+                'name' => "Dedet",
+                'personalCode' => 'ddd',
+                'otherCode' => 'ccc',
+                'email' => "dedet@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
             ]
         ];
 
-        // DB::table('users')->insert($usersToAdd);
+        DB::table('users')->insert($usersToAdd);
 
 
-        DB::table('group')->insert(
+        DB::table('groups')->insert(
             [
-                'id' => 1,
-                'name' => "Le groupe des ptits choux",
-                'user_id1' => 1,
-                'user_id2' => 2,
+                [
+                    'id' => 1,
+                    'name' => "Le groupe des ptits choux",
+                    'user_id1' => 1,
+                    'user_id2' => 2,
+                ],
+                [
+                    'id' => 2,
+                    'name' => "Le groupe des ptits poupou",
+                    'user_id1' => 3,
+                    'user_id2' => 4,
+                ]
             ]
         );
 
         $tasksToAdd = [
             [
                 'id' => 1,
-                'user_id' => 1,
+                'group_id' => 1,
                 'category' => 'kitchen',
                 'title' => "faire à manger",
                 'description' => "Vous devez préparer le repas.",
@@ -59,7 +90,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'user_id' => 1,
+                'group_id' => 1,
                 'category' => 'kitchen',
                 'title' => "nettoyer la table",
                 'description' => "il faut nettoyer la table.",
@@ -69,10 +100,20 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'user_id' => 1,
+                'group_id' => 2,
                 'category' => 'kitchen',
                 'title' => "nettoyer la table",
                 'description' => "il faut nettoyer la table ben.",
+                'reward' => 10,
+                'isDone' => false,
+                'associated_day' => 'Lun',
+            ],
+            [
+                'id' => 4,
+                'group_id' => 2,
+                'category' => 'kitchen',
+                'title' => "Test",
+                'description' => "il faut nettoyer.",
                 'reward' => 10,
                 'isDone' => false,
                 'associated_day' => 'Lun',
@@ -80,6 +121,6 @@ class DatabaseSeeder extends Seeder
         ];
 
 
-        // DB::table('tasks')->insert($tasksToAdd);
+        DB::table('tasks')->insert($tasksToAdd);
     }
 }

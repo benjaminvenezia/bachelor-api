@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +54,11 @@ class GroupController extends Controller
             ]);
         }
 
+        $partnerToModify = User::find($idPartner);
+        User::where('id', $idPartner)->update(['otherCode' => Auth::user()->personalCode]);
+        User::where('id', $userId)->update(['otherCode' => $partnerToModify->personalCode]);
+
+        //--------
         $group = new Group();
         $group->user_id1 = $userId;
         $group->user_id2 = $idPartner;

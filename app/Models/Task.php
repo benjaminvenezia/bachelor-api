@@ -4,10 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Task extends Model
 {
     use HasFactory;
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    // protected $attributes = [
+    //     'group_id' => Auth::user()->group
+    // ];
 
     /**
      * The primary key associated with the table.
@@ -25,7 +35,8 @@ class Task extends Model
 
     protected $fillable = [
         'id',
-        'user_id',
+        'group_id',
+        // 'user_id',
         'category',
         'title',
         'description',
@@ -34,8 +45,8 @@ class Task extends Model
         'associated_day',
     ];
 
-    public function user()
+    public function group(): HasOne
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Group::class);
     }
 }

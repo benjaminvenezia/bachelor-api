@@ -30,9 +30,9 @@ class TasksResource extends JsonResource
             'reward' => $this->reward,
             'isDone' => $this->isDone,
             'associatedDay' => $this->associated_day,
-            'userId' => $this->user_id,
-            'user name' => $this->user->name,
-            'user email' => $this->user->email,
+            // 'userId' => $this->user_id,
+            // 'user name' => $this->user->name,
+            // 'user email' => $this->user->email,
         ];
     }
 }

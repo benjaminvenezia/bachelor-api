@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Resources\GroupResource;
 use App\Http\Resources\TasksResource;
+use App\Models\Group;
 use App\Models\Task;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -14,14 +16,37 @@ class TasksController extends Controller
     use HttpResponses;
 
     /**
-     * Display a listing of the resource.
+     * Return the id of the current user Group.
      *
+     * @return void
+     */
+    public function getCurrentGroupId(): int|string
+    {
+        $group = GroupResource::collection(
+            Group::where('user_id1', Auth::user()->id)->get(),
+        );
+
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
+        }
+
+        return $group[0]->id;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     * Retourne toutes les tâches pour le groupe actuel
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $tasks =  TasksResource::collection(
-            Task::where('user_id', Auth::user()->id)->get(),
+        $groupId = $this->getCurrentGroupId();
+
+        $tasks = TasksResource::collection(
+            Task::where('group_id', $groupId)->get(),
         );
 
         return $tasks;
@@ -37,12 +62,11 @@ class TasksController extends Controller
     {
         $request->validated($request->all());
 
-        //log
-        // $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-        // $output->writeln($request->id);
+        $groupId = $this->getCurrentGroupId();
 
         $task = Task::create([
             'id' => $request->id,
+            'group_id' => $groupId,
             'user_id' => Auth::user()->id,
             'title' => $request->title,
             'description' => $request->description,
@@ -63,7 +87,15 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        return $this->isNotAuthorized($task) ? $this->isNotAuthorized($task) : new TasksResource($task);
+
+        $groupId = $this->getCurrentGroupId();
+
+        if ($groupId === $task->group_id) {
+            return $task;
+        } else {
+            return $this->isNotAuthorized($task);
+        }
+
         //$task = Task::find($id); pas nécessaire cf shortcut. :)
     }
 
@@ -76,13 +108,15 @@ class TasksController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        if (Auth::user()->id !== $task->user_id) {
+        $groupId = $this->getCurrentGroupId();
+
+        if ($groupId === $task->group_id) {
+            $task->update($request->all());
+
+            return new TasksResource($task);
+        } else {
             return $this->error('', 'You are not authorized to make this request', 403);
         }
-
-        $task->update($request->all());
-
-        return new TasksResource($task);
     }
 
     /**
@@ -93,7 +127,15 @@ class TasksController extends Controller
      */
     public function destroy(Task $task)
     {
-        return $this->isNotAuthorized($task) ? $this->isNotAuthorized($task) : $task->delete();
+        $groupId = $this->getCurrentGroupId();
+
+        if ($groupId === $task->group_id) {
+            $task->delete();
+
+            return new TasksResource($task);
+        } else {
+            return $this->error('', 'You are not authorized to make this request', 403);
+        }
     }
 
     private function isNotAuthorized($task)
