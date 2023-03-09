@@ -110,14 +110,18 @@ class TasksController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        $groupId = $this->getCurrentGroupId();
+        try {
+            $groupId = $this->getCurrentGroupId();
 
-        if ($groupId === $task->group_id) {
-            $task->update($request->all());
+            if ($groupId === $task->group_id) {
+                $task->update($request->all());
 
-            return new TasksResource($task);
-        } else {
-            return $this->error('', 'You are not authorized to make this request', 403);
+                return new TasksResource($task);
+            } else {
+                return $this->error('', 'You are not authorized to make this request', 403);
+            }
+        } catch (\Exception $e) {
+            return $this->error('Update error', $e->getMessage(), 500);
         }
     }
 
