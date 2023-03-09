@@ -9,7 +9,8 @@ use App\Models\Group;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,46 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        User::factory()->count(2)->create();
+        $usersToAdd = [
+            [
+                'id' => 1,
+                'name' => "Thierry",
+                'personalCode' => 'aaa',
+                'otherCode' => 'bbb',
+                'email' => "ben@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ],
+            [
+                'id' => 2,
+                'name' => "Marjorie",
+                'personalCode' => 'bbb',
+                'otherCode' => 'aaa',
+                'email' => "noemi@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ],
+            [
+                'id' => 3,
+                'name' => "Armand",
+                'personalCode' => 'ccc',
+                'otherCode' => 'ddd',
+                'email' => "armand@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ],
+            [
+                'id' => 4,
+                'name' => "Dedet",
+                'personalCode' => 'ddd',
+                'otherCode' => 'ccc',
+                'email' => "dedet@gmail.com",
+                'password' => Hash::make("password"),
+                'points' => 0,
+            ]
+        ];
+
+        DB::table('users')->insert($usersToAdd);
 
         Gage::factory()->count(5)->create();
 
