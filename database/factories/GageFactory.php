@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,9 +27,7 @@ class GageFactory extends Factory
             'month' => $this->faker->numberBetween(1, 12),
             'year' => $this->faker->numberBetween(2022, 2023),
             'timestamp' => $this->faker->unixTime,
-            'user_id' => function () {
-                return \App\Models\User::factory()->create()->id;
-            }
+            'user_id' => User::all()->random()->id,
         ];
     }
 }

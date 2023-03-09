@@ -2,8 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
@@ -18,9 +21,14 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::all()->random()->id,
-            'name' => $this->faker->unique()->sentence(),
-            'description' => $this->faker->text(),
+            'id' => $this->faker->unique()->randomNumber(),
+            'group_id' => Group::all()->random()->id,
+            'category' => 'kitchen',
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+            'reward' => 12,
+            'isDone' => false,
+            'associated_day' => 'Lun',
         ];
     }
 }
