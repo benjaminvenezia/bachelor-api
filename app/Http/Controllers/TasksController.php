@@ -133,14 +133,18 @@ class TasksController extends Controller
      */
     public function destroy(Task $task)
     {
-        $groupId = $this->getCurrentGroupId();
+        try {
+            $groupId = $this->getCurrentGroupId();
 
-        if ($groupId === $task->group_id) {
+            if ($groupId !== $task->group_id) {
+                return $this->error('', 'You are not authorized to make this request', 403);
+            }
+
             $task->delete();
 
             return new TasksResource($task);
-        } else {
-            return $this->error('', 'You are not authorized to make this request', 403);
+        } catch (\Exception $e) {
+            return $this->error('', $e->getMessage(), 500);
         }
     }
 
