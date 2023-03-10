@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Helpers\MyHelper;
 
 class AuthController extends Controller
 {
@@ -18,14 +19,17 @@ class AuthController extends Controller
         $request->validated($request->all());
 
         if (!Auth::attempt($request->only(['email', 'password']))) {
-            return $this->error('', 'Credentials do not match', 401);
+            return $this->error('', 'Vos identifiants ne correspondent pas', 401);
         }
-
         $user = User::where('email', $request->email)->first();
 
         if (Auth::user()->otherCode === "") {
-            return $this->error('', 'You need to link with your partner before accessing the homepage.', 401);
+            return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
         }
+
+        // if (!MyHelper::getCurrentGroupId()) {
+        //     return $this->error('', 'Il semblerait que vous ne soyez pas dans un groupe... Ceci ne devrait pas arriver, merci de contacter le support. :)', 401);
+        // }
 
         return $this->success([
             'user' => $user,
