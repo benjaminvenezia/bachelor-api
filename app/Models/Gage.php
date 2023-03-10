@@ -10,6 +10,16 @@ class Gage extends Model
     use HasFactory;
 
     /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'is_done' => 0,
+        'date_string' => "2023-03-12"
+    ];
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
@@ -21,7 +31,7 @@ class Gage extends Model
         'description',
         'category',
         'isDone',
-        'dateString',
+        'date_string',
         'day',
         'month',
         'year',

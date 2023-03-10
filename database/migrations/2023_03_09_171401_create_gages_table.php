@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('gages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
+            $table->longText('description');
             $table->string('category');
             $table->boolean('is_done');
             $table->string('date_string');

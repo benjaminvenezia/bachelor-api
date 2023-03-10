@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GagesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserController;
@@ -20,8 +21,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
+    Route::resource('/gages', GagesController::class);
+
     Route::resource('/tasks', TasksController::class);
-    Route::resource('/gages', TasksController::class);
 
     Route::resource('/users', UserController::class);
 
