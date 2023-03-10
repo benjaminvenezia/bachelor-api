@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
     Route::resource('/tasks', TasksController::class);
+    Route::resource('/gages', TasksController::class);
 
     Route::resource('/users', UserController::class);
 
