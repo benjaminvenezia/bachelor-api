@@ -27,7 +27,7 @@ class TasksController extends Controller
         );
 
         if (count($group) == 0) {
-            $group =  GroupResource::collection(
+            $group = GroupResource::collection(
                 Group::where('user_id2', Auth::user()->id)->get(),
             );
         }

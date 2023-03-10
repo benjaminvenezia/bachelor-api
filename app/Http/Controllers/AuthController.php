@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Helpers\MyHelper;
 
 class AuthController extends Controller
 {
@@ -26,10 +25,6 @@ class AuthController extends Controller
         if (Auth::user()->otherCode === "") {
             return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
         }
-
-        // if (!MyHelper::getCurrentGroupId()) {
-        //     return $this->error('', 'Il semblerait que vous ne soyez pas dans un groupe... Ceci ne devrait pas arriver, merci de contacter le support. :)', 401);
-        // }
 
         return $this->success([
             'user' => $user,
