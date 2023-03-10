@@ -14,8 +14,12 @@ class GagesController extends Controller
      */
     public function index()
     {
-        $gages = Gage::all();
-        return response()->json($gages);
+        try {
+            $gages = Gage::all();
+            return response()->json($gages);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**
