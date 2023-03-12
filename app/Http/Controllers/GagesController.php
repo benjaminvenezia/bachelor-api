@@ -8,6 +8,7 @@ use App\Http\Resources\GroupResource;
 use App\Models\Gage;
 use App\Models\Group;
 use App\Models\User;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 class GagesController extends Controller
 {
+
+    use Helper;
+
     /**
      * Display a listing of the resource.
      *
@@ -40,27 +44,29 @@ class GagesController extends Controller
     {
         $request->validated($request->all());
 
-        try {
-            $partner = User::where('personalCode', Auth::user()->otherCode)->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            return new JsonResponse([
-                'message' => 'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.'
-            ]);
-        }
+        $partnerId = Helper::getCurrentPartnerId();
 
-        $gage = Gage::create([
-            'id' => $request->id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'category' => $request->category,
-            'is_done' => $request->is_done,
-            'date_string' => $request->date_string,
-            'day' => $request->day,
-            'month' => $request->month,
-            'year' => $request->year,
-            'timestamp' => $request->timestamp,
-            'user_id' => $partner->id,
-        ]);
+        if ($partnerId !== null) {
+            $gage = Gage::create([
+                'id' => $request->id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category,
+                'is_done' => $request->is_done,
+                'date_string' => $request->date_string,
+                'day' => $request->day,
+                'month' => $request->month,
+                'year' => $request->year,
+                'timestamp' => $request->timestamp,
+                'user_id' => $partnerId,
+            ]);
+        } else {
+            return response()->json([
+                'error' => [
+                    'message' => 'Impossible de créer un gage car aucun partenaire n\'a été trouvé pour l\'utilisateur actuellement authentifié.',
+                ],
+            ], 400);
+        }
 
         return new GageResource($gage);
     }

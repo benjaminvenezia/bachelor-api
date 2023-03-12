@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('description');
             $table->string('category');
+            $table->integer('cost')->default(0);
             $table->boolean('is_done');
             $table->string('date_string');
             $table->unsignedSmallInteger('day');

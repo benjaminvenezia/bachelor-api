@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +17,7 @@ class Gage extends Model
      */
     protected $attributes = [
         'is_done' => 0,
-        'date_string' => "2023-03-12"
+        'date_string' => "2023-03-12",
     ];
 
     /**
@@ -31,6 +32,7 @@ class Gage extends Model
         'description',
         'category',
         'is_done',
+        'cost',
         'date_string',
         'day',
         'month',

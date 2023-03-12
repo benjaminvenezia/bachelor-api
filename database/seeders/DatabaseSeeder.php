@@ -40,33 +40,15 @@ class DatabaseSeeder extends Seeder
                 'email' => "noemi@gmail.com",
                 'password' => Hash::make("password"),
                 'points' => 0,
-            ],
-            [
-                'id' => 3,
-                'name' => "Armand",
-                'personalCode' => 'ccc',
-                'otherCode' => 'ddd',
-                'email' => "armand@gmail.com",
-                'password' => Hash::make("password"),
-                'points' => 0,
-            ],
-            [
-                'id' => 4,
-                'name' => "Dedet",
-                'personalCode' => 'ddd',
-                'otherCode' => 'ccc',
-                'email' => "dedet@gmail.com",
-                'password' => Hash::make("password"),
-                'points' => 0,
             ]
         ];
 
         DB::table('users')->insert($usersToAdd);
 
-        Gage::factory()->count(5)->create();
+        // Gage::factory()->count(5)->create();
 
-        Group::factory()->count(1)->create();
+        // Group::factory()->count(1)->create();
 
-        Task::factory()->count(20)->create();
+        // Task::factory()->count(20)->create();
     }
 }

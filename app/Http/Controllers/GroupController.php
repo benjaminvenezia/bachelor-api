@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\User;
+use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
+
+    use Helper;
 
     /**
      * Display a listing of the resource.

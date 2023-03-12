@@ -20,12 +20,13 @@ class GageResource extends JsonResource
             'description' => $request->description,
             'category' => $request->category,
             'is_done' => $request->is_done,
+            'cost' => $request->cost,
             'date_string' => $request->date_string,
             'day' => $request->day,
             'month' => $request->month,
             'year' => $request->year,
             'timestamp' => $request->timestamp,
-            'user_id' => $request->user_id,
+            'user_id' => $this->user_id,
         ];
     }
 }
