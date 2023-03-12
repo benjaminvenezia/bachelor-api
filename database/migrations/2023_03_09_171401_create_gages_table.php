@@ -24,7 +24,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('day');
             $table->unsignedSmallInteger('month');
             $table->unsignedSmallInteger('year');
-            $table->unsignedInteger('timestamp');
             $table->timestamps();
 
             // Ajouter une colonne user_id pour la clé étrangère

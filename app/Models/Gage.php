@@ -37,7 +37,6 @@ class Gage extends Model
         'day',
         'month',
         'year',
-        'timestamp',
         'user_id'
     ];
 

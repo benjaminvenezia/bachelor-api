@@ -26,7 +26,6 @@ class GageFactory extends Factory
             'day' => $this->faker->numberBetween(1, 31),
             'month' => $this->faker->numberBetween(1, 12),
             'year' => $this->faker->numberBetween(2022, 2023),
-            'timestamp' => $this->faker->unixTime,
             'user_id' => User::all()->random()->id,
         ];
     }

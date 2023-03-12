@@ -57,7 +57,6 @@ class GagesController extends Controller
                 'day' => $request->day,
                 'month' => $request->month,
                 'year' => $request->year,
-                'timestamp' => $request->timestamp,
                 'user_id' => $partnerId,
             ]);
         } else {
