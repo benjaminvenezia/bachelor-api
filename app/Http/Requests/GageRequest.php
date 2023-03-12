@@ -28,6 +28,7 @@ class GageRequest extends FormRequest
             'title' => ['required', 'max:255'],
             'description' => ['required'],
             'category' => ['required'],
+            'user_id' => ['required'],
         ];
     }
 }

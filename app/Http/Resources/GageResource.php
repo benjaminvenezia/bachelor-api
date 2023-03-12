@@ -25,7 +25,7 @@ class GageResource extends JsonResource
             'month' => $request->month,
             'year' => $request->year,
             'timestamp' => $request->timestamp,
-            'user_id' => $request->userId,
+            'user_id' => $request->user_id,
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Resources\GroupResource;
 use App\Http\Resources\TasksResource;
 use App\Models\Group;
 use App\Models\Task;
+use App\Traits\Helper;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,27 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class TasksController extends Controller
 {
     use HttpResponses;
-
-    /**
-     * Return the id of the current user Group.
-     *
-     * @return void
-     */
-    public function getCurrentGroupId(): int|string
-    {
-        $group = GroupResource::collection(
-            Group::where('user_id1', Auth::user()->id)->get(),
-        );
-
-        if (count($group) == 0) {
-            $group = GroupResource::collection(
-                Group::where('user_id2', Auth::user()->id)->get(),
-            );
-        }
-
-        return $group[0]->id;
-    }
-
+    use Helper;
 
     /**
      * Display a listing of the resource.
@@ -43,7 +24,7 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $groupId = $this->getCurrentGroupId();
+        $groupId = Helper::getCurrentGroupId();
 
         $tasks = TasksResource::collection(
             Task::where('group_id', $groupId)->get(),
@@ -62,7 +43,7 @@ class TasksController extends Controller
     {
         $request->validated($request->all());
 
-        $groupId = $this->getCurrentGroupId();
+        $groupId = Helper::getCurrentGroupId();
 
         $task = Task::create([
             'id' => $request->id,
@@ -89,7 +70,7 @@ class TasksController extends Controller
     {
 
         try {
-            $groupId = $this->getCurrentGroupId();
+            $groupId = Helper::getCurrentGroupId();
 
             if ($groupId === $task->group_id) {
                 return $task;
@@ -111,7 +92,7 @@ class TasksController extends Controller
     public function update(Request $request, Task $task)
     {
         try {
-            $groupId = $this->getCurrentGroupId();
+            $groupId = Helper::getCurrentGroupId();
 
             if ($groupId === $task->group_id) {
                 $task->update($request->all());
@@ -134,7 +115,7 @@ class TasksController extends Controller
     public function destroy(Task $task)
     {
         try {
-            $groupId = $this->getCurrentGroupId();
+            $groupId = Helper::getCurrentGroupId();
 
             if ($groupId !== $task->group_id) {
                 return $this->error('', 'You are not authorized to make this request', 403);

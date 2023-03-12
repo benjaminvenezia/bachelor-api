@@ -30,12 +30,13 @@ class Gage extends Model
         'title',
         'description',
         'category',
-        'isDone',
+        'is_done',
         'date_string',
         'day',
         'month',
         'year',
         'timestamp',
+        'user_id'
     ];
 
     public function user()
