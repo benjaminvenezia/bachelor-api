@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('reward');
-            $table->boolean('isDone');
+            $table->boolean('is_done');
             $table->string('associated_day');
+            $table->string('path_icon_todo');
 
             $table->foreign('group_id')
                 ->references('id')

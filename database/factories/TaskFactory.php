@@ -27,7 +27,7 @@ class TaskFactory extends Factory
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'reward' => 12,
-            'isDone' => false,
+            'is_done' => false,
             'associated_day' => 'Lun',
         ];
     }

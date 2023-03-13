@@ -41,8 +41,9 @@ class Task extends Model
         'title',
         'description',
         'reward',
-        'isDone',
+        'is_done',
         'associated_day',
+        'path_icon_todo'
     ];
 
     public function group(): HasOne

@@ -28,8 +28,9 @@ class TasksResource extends JsonResource
             'description' => $this->description,
             'category' => $this->category,
             'reward' => $this->reward,
-            'isDone' => $this->isDone,
-            'associatedDay' => $this->associated_day,
+            'is_done' => $this->is_done,
+            'associated_day' => $this->associated_day,
+            'path_icon_todo' => $this->path_icon_todo
             // 'userId' => $this->user_id,
             // 'user name' => $this->user->name,
             // 'user email' => $this->user->email,

@@ -53,7 +53,8 @@ class TasksController extends Controller
             'description' => $request->description,
             'category' => $request->category,
             'reward' => $request->reward,
-            'isDone' => $request->isDone,
+            'is_done' => $request->is_done,
+            'path_icon_todo' => $request->path_icon_todo,
             'associated_day' => $request->associated_day
         ]);
 
