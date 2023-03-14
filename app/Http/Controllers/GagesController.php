@@ -52,6 +52,7 @@ class GagesController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category,
+                'cost' => $request->cost,
                 'is_done' => $request->is_done,
                 'date_string' => $request->date_string,
                 'day' => $request->day,
