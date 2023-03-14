@@ -22,7 +22,7 @@ class AuthController extends Controller
         }
         $user = User::where('email', $request->email)->first();
 
-        if (Auth::user()->otherCode === "") {
+        if (Auth::user()->other_code === "") {
             return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
         }
 

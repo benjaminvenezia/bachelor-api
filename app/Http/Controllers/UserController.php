@@ -25,7 +25,7 @@ class UserController extends Controller
     }
 
     /**
-     * Find an user by our otherCode value
+     * Find an user by our other_code value
      *
      * @return \Illuminate\Http\Response
      */
