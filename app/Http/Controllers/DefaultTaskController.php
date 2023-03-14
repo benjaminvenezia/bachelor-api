@@ -14,7 +14,8 @@ class DefaultTaskController extends Controller
      */
     public function index()
     {
-        //
+        $defaultTasks = DefaultTask::all();
+        return $defaultTasks;
     }
 
     /**

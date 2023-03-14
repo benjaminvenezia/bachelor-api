@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DefaultTaskController;
 use App\Http\Controllers\GagesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TasksController;
@@ -24,6 +25,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/gages', GagesController::class);
 
     Route::resource('/tasks', TasksController::class);
+
+    Route::resource('/default_tasks', DefaultTaskController::class);
 
     Route::resource('/users', UserController::class);
 
