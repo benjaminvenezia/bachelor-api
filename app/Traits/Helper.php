@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Auth;
 trait Helper
 {
 
-
-
-
     /**
      * Return the id of current group
      *
@@ -55,7 +52,7 @@ trait Helper
         }
     }
 
-    static function getCurrentPartnerId()
+    static function getPartnerId(): int|null
     {
         try {
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
@@ -65,5 +62,11 @@ trait Helper
         } catch (ModelNotFoundException $e) {
             return null;
         }
+    }
+
+    static function getUserId(): int
+    {
+        $userId = Auth::user()->id;
+        return $userId;
     }
 }

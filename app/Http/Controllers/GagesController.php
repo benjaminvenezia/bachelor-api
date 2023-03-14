@@ -26,8 +26,14 @@ class GagesController extends Controller
      */
     public function index()
     {
+        $idPartner = Helper::getPartnerId();
+        $userId = Helper::getUserId();
+
         try {
-            $gages = Gage::all();
+            $gages = GageResource::collection(
+                Gage::whereIn('user_id', [$idPartner, $userId])->get()
+            );
+
             return response()->json($gages);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -44,7 +50,7 @@ class GagesController extends Controller
     {
         $request->validated($request->all());
 
-        $partnerId = Helper::getCurrentPartnerId();
+        $partnerId = Helper::getPartnerId();
 
         if ($partnerId !== null) {
             $gage = Gage::create([
