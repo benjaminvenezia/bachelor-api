@@ -58,8 +58,8 @@ class GroupController extends Controller
         }
 
         $partnerToModify = User::find($idPartner);
-        User::where('id', $idPartner)->update(['otherCode' => Auth::user()->personalCode]);
-        User::where('id', $userId)->update(['otherCode' => $partnerToModify->personalCode]);
+        User::where('id', $idPartner)->update(['otherCode' => Auth::user()->personal_code]);
+        User::where('id', $userId)->update(['otherCode' => $partnerToModify->personal_code]);
 
         //--------
         $group = new Group();

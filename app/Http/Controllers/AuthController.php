@@ -40,7 +40,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'personalCode' => $request->personalCode
+            'personal_code' => $request->personal_code
         ]);
 
         return $this->success([

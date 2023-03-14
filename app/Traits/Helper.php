@@ -45,7 +45,7 @@ trait Helper
     static function getCurrentPartner()
     {
         try {
-            $partner = User::where('personalCode', Auth::user()->otherCode)->firstOrFail();
+            $partner = User::where('personal_code', Auth::user()->otherCode)->firstOrFail();
 
             return $partner;
         } catch (ModelNotFoundException $e) {
@@ -58,7 +58,7 @@ trait Helper
     static function getCurrentPartnerId()
     {
         try {
-            $partner = User::where('personalCode', Auth::user()->otherCode)->firstOrFail();
+            $partner = User::where('personal_code', Auth::user()->otherCode)->firstOrFail();
 
 
             return $partner->id;

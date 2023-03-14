@@ -18,7 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'personalCode' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{3}'),
+            'personal_code' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{3}'),
             'otherCode' => $this->faker->regexify('[A-Z]{4}[0-9]{4}'),
             'name' => $this->faker->name,
             'points' => $this->faker->numberBetween(0, 1000),

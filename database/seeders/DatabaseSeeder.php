@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => "Thierry",
-                'personalCode' => 'aaa',
+                'personal_code' => 'aaa',
                 'otherCode' => 'bbb',
                 'email' => "ben@gmail.com",
                 'password' => Hash::make("password"),
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 2,
                 'name' => "Marjorie",
-                'personalCode' => 'bbb',
+                'personal_code' => 'bbb',
                 'otherCode' => 'aaa',
                 'email' => "noemi@gmail.com",
                 'password' => Hash::make("password"),

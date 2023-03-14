@@ -21,7 +21,7 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::creating(function ($model) {
-            $model->personalCode = strval(bin2hex(random_bytes(5)));
+            $model->personal_code = strval(bin2hex(random_bytes(5)));
         });
     }
 
