@@ -31,9 +31,17 @@ class DefaultTasksSeeder extends Seeder
             [
                 'id' => 2,
                 'category' => config('constants.KITCHEN'),
-                'title' => "Faire la vaisselle à la main",
+                'title' => "Remplir et lancer la machine à laver la vaisselle",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
-                'reward' => 30,
+                'reward' => 20,
+                'path_icon_todo' => "bocal"
+            ],
+            [
+                'id' => 3,
+                'category' => config('constants.KITCHEN'),
+                'title' => "Lancer la machine à laver la vaisselle",
+                'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
+                'reward' => 10,
                 'path_icon_todo' => "bocal"
             ]
 
@@ -41,7 +49,7 @@ class DefaultTasksSeeder extends Seeder
 
         $defaultTasksRoom = [
             [
-                'id' => 3,
+                'id' => 4,
                 'category' => config('constants.ROOM'),
                 'title' => "Une tâche liée à la chambre 1",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
@@ -49,7 +57,7 @@ class DefaultTasksSeeder extends Seeder
                 'path_icon_todo' => "balai"
             ],
             [
-                'id' => 4,
+                'id' => 5,
                 'category' => config('constants.ROOM'),
                 'title' => "Une tâche liée à la chambre 2",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",

@@ -22,11 +22,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
+    Route::resource('/default_tasks', DefaultTaskController::class);
     Route::resource('/gages', GagesController::class);
 
     Route::resource('/tasks', TasksController::class);
 
-    Route::resource('/default_tasks', DefaultTaskController::class);
 
     Route::resource('/users', UserController::class);
 
