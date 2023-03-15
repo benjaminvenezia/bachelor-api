@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DefaultGageController;
 use App\Http\Controllers\DefaultTaskController;
 use App\Http\Controllers\GagesController;
 use App\Http\Controllers\GroupController;
@@ -23,14 +24,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
     Route::resource('/default_tasks', DefaultTaskController::class);
+    Route::resource('/default_gages', DefaultGageController::class);
     Route::resource('/gages', GagesController::class);
-
     Route::resource('/tasks', TasksController::class);
-
-
     Route::resource('/users', UserController::class);
-
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
-
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 });
