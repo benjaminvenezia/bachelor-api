@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultGageController;
 use App\Http\Controllers\DefaultTaskController;
@@ -30,4 +31,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/users', UserController::class);
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
+
+    //tâches d'administration 
+    Route::group(['prefix' => 'admin', 'middleware' => 'is_admin', 'as' => 'admin'], function () {
+        Route::get('/test', [AdminController::class, 'test']);
+        Route::get('/test2', [AdminController::class, 'test']);
+    });
 });
