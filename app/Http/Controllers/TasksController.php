@@ -69,7 +69,6 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-
         try {
             $groupId = Helper::getCurrentGroupId();
 

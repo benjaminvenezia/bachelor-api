@@ -54,7 +54,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         if (Auth::user()->id !== $user->id) {
-            // return $this->error('', 'You are not authorized to make this request', 403);
             $errorHandling = [
                 'message' => "You are not authorized to make this request",
                 'code' => 403

@@ -16,7 +16,8 @@ class GroupController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * à améliorer en utilisant helper...
+     * 
      * @return \Illuminate\Http\Response
      */
     public function getTheCurrentUserGroup()

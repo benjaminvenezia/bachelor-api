@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DefaultTaskResource;
+
 use App\Models\DefaultTask;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,10 @@ class DefaultTaskController extends Controller
     public function index()
     {
         try {
-            $defaultTasks = DefaultTask::all();
+            $defaultTasks = DefaultTaskResource::collection(
+                DefaultTask::all(),
+            );
+
             return $defaultTasks;
         } catch (\Exception $e) {
             $errorMessage = 'Une erreur s\'est produite lors de la récupération des données.';
@@ -38,7 +43,28 @@ class DefaultTaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $task = DefaultTask::create([
+                'id' => $request->id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category,
+                'reward' => $request->reward,
+                'path_icon_todo' => $request->path_icon_todo,
+            ]);
+
+            return $task;
+        } catch (\Exception $e) {
+            $errorMessage = 'Une erreur s\'est produite lors de la création de la tâche par défaut.';
+            $errorCode = 500;
+
+            if ($e instanceof \Illuminate\Database\QueryException) {
+                $errorMessage = 'Une erreur s\'est produite lors de l\'exécution de la requête SQL.';
+                $errorCode = 400;
+            }
+
+            return response()->json(['error' => $errorMessage, 'details' => $e->getMessage()], $errorCode);
+        }
     }
 
     /**
@@ -49,7 +75,11 @@ class DefaultTaskController extends Controller
      */
     public function show(DefaultTask $defaultTask)
     {
-        //
+        try {
+            return $defaultTask;
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -61,7 +91,13 @@ class DefaultTaskController extends Controller
      */
     public function update(Request $request, DefaultTask $defaultTask)
     {
-        //
+        try {
+            $defaultTask->update($request->all());
+
+            return new DefaultTaskResource($defaultTask);
+        } catch (\Exception $e) {
+            return $this->error('Update error', $e->getMessage(), 500);
+        }
     }
 
     /**
