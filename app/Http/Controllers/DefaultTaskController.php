@@ -108,6 +108,11 @@ class DefaultTaskController extends Controller
      */
     public function destroy(DefaultTask $defaultTask)
     {
-        //
+        try {
+            $defaultTask->delete();
+            return new DefaultTaskResource($defaultTask);
+        } catch (\Exception $e) {
+            return $this->error('destroy error', $e->getMessage(), 500);
+        }
     }
 }
