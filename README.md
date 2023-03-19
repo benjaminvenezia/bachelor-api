@@ -20,6 +20,6 @@ When you clone the git repo you must follow these steps to run the project:
 7. Run php artisan db:seed to run seeders, if any.
 8. Run php artisan serve
 
-
 php artisan make:controller DefaultGageController --api --model=DefaultTask
 php artisan db:seed --class=DefaultTasksSeeder
+php artisan db:seed --class=DefaultGageSeeder

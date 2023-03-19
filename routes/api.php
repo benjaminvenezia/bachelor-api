@@ -24,17 +24,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
+    Route::resource('/tasks', TasksController::class);
     Route::resource('/default_tasks', DefaultTaskController::class);
     Route::resource('/default_gages', DefaultGageController::class);
     Route::resource('/gages', GagesController::class);
-    Route::resource('/tasks', TasksController::class);
     Route::resource('/users', UserController::class);
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 
     //tâches d'administration 
     Route::group(['prefix' => 'admin', 'middleware' => 'is_admin', 'as' => 'admin'], function () {
-        Route::get('/test', [AdminController::class, 'test']);
-        Route::get('/test2', [AdminController::class, 'test']);
+        Route::get('/default_tasks/{defaultTask}', [AdminController::class, 'show_default_task']);
+        Route::post('/default_tasks', [AdminController::class, 'store_default_task']);
+        Route::patch('/default_tasks', [AdminController::class, 'update_default_task']);
+        Route::delete('/default_tasks/{defaultTask}', [AdminController::class, 'destroy_default_task']);
     });
 });
