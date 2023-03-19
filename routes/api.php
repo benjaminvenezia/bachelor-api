@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'admin', 'middleware' => 'is_admin', 'as' => 'admin'], function () {
         Route::get('/default_tasks/{defaultTask}', [AdminController::class, 'show_default_task']);
         Route::post('/default_tasks', [AdminController::class, 'store_default_task']);
-        Route::patch('/default_tasks', [AdminController::class, 'update_default_task']);
+        Route::patch('/default_tasks/{defaultTask}', [AdminController::class, 'update_default_task']);
         Route::delete('/default_tasks/{defaultTask}', [AdminController::class, 'destroy_default_task']);
     });
 });
