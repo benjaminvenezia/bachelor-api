@@ -66,23 +66,4 @@ class UserController extends Controller
 
         return new UserResource($user);
     }
-
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(User $user)
-    // {
-    //     return $this->isNotAuthorized($user) ? $this->isNotAuthorized($user) : new UserResource($user);
-    //     //$task = Task::find($id); pas nécessaire cf shortcut. :)
-    // }
-
-    private function isNotAuthorized($user)
-    {
-        if (Auth::user()->id !== $user->id) {
-            return $this->error('', 'You are not authorized to make this request', 403);
-        }
-    }
 }

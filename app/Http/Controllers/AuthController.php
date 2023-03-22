@@ -20,7 +20,9 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only(['email', 'password']))) {
             return $this->error('', 'Vos identifiants ne correspondent pas', 401);
         }
-        $user = User::where('email', $request->email)->first();
+
+        //$user = User::where('email', $request->email)->first();
+        $user = Auth::user();
 
         if (Auth::user()->other_code === "") {
             return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
@@ -28,7 +30,7 @@ class AuthController extends Controller
 
         return $this->success([
             'user' => $user,
-            'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken
+            'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken,
         ]);
     }
 
