@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -73,6 +74,24 @@ class GroupController extends Controller
         return response()->json([
             'code' => 200,
             'message' => 'Groupe crée avec succès!',
+        ]);
+    }
+
+
+    /**
+     * Return the count group
+     * @return \Illuminate\Http\Response
+     */
+    public function get_total_groups()
+    {
+        try {
+            $total = DB::table('groups')->count();
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+
+        return response()->json([
+            'count' => $total,
         ]);
     }
 }

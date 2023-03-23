@@ -26,22 +26,25 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);
+
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
-    
+
     Route::get('/default_tasks', [DefaultTaskController::class, 'get_all_defaults_tasks']);
     Route::get('/default_gages', [DefaultGageController::class, 'get_all_defaults_gages']);
-   
+
     //tâches d'administration 
     Route::group(['prefix' => 'admin', 'middleware' => 'is_admin', 'as' => 'admin'], function () {
         Route::get('/default_tasks/{defaultTask}', [DefaultTaskController::class, 'show_default_task']);
         Route::post('/default_tasks', [DefaultTaskController::class, 'store_default_task']);
         Route::patch('/default_tasks/{defaultTask}', [DefaultTaskController::class, 'update_default_task']);
         Route::delete('/default_tasks/{defaultTask}', [DefaultTaskController::class, 'destroy_default_task']);
-        
+
         Route::get('/default_gages/{defaultGage}', [DefaultGageController::class, 'show_default_gage']);
         Route::post('/default_gages', [DefaultGageController::class, 'store_default_gage']);
         Route::patch('/default_gages/{defaultGage}', [DefaultGageController::class, 'update_default_gage']);
         Route::delete('/default_gages/{defaultGage}', [DefaultGageController::class, 'destroy_default_gage']);
+
+        Route::get('/group/count', [GroupController::class, 'get_total_groups']);
     });
 });
