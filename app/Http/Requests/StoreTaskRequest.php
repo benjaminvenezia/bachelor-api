@@ -28,8 +28,9 @@ class StoreTaskRequest extends FormRequest
             'title' => ['required', 'max:255'],
             'description' => ['required', 'max:500'],
             'category' => ['required'],
-            'reward' => ['required', 'numeric', 'min:0'],
-            'is_done' => ['nullable', 'boolean'],
+            // 'reward' => ['required', 'numeric', 'min:0'],
+            'reward' => ['required'],
+            'is_done' => ['nullable'],
             'associated_day' => ['required'],
             'path_icon_todo' => ['required']
         ];

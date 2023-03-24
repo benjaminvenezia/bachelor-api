@@ -83,6 +83,7 @@ class TasksController extends Controller
             $tasksData = [];
 
             foreach ($tasks as $task) {
+
                 $validatedData = Validator::make($task, (new StoreTaskRequest())->rules())->validate();
 
                 $taskData = [
