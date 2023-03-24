@@ -29,7 +29,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function findUserByCode(Request $request, $code)
+    public function show(Request $request, $code)
     {
         if (User::where('personal_code', '=', $code)->count() === 0) {
             return response()->json([

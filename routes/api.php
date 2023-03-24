@@ -21,11 +21,11 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/users/{code}', [UserController::class, 'findUserByCode']);
 
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);
+    // Route::get('/users/{code}', [UserController::class, 'findPartnerByCode']);
 
     Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
