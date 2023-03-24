@@ -9,8 +9,10 @@ use App\Models\Group;
 use App\Models\Task;
 use App\Traits\Helper;
 use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TasksController extends Controller
 {
@@ -62,7 +64,53 @@ class TasksController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_multiple(Request $request)
+    {
+        try {
+            $groupId = Helper::getCurrentGroupId();
+
+            $tasks = $request->input('tasks');
+
+            if (!is_array($tasks)) {
+                throw new Exception("Le paramètre 'tasks' doit être un tableau");
+            }
+
+            $tasksData = [];
+
+            foreach ($tasks as $task) {
+                $validatedData = Validator::make($task, (new StoreTaskRequest())->rules())->validate();
+
+                $taskData = [
+                    'id' => $validatedData['id'],
+                    'group_id' => $groupId,
+                    'category' => $validatedData['category'],
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'reward' => $validatedData['reward'],
+                    'is_done' => $validatedData['is_done'],
+                    'associated_day' => $validatedData['associated_day'],
+                    'path_icon_todo' => $validatedData['path_icon_todo']
+                ];
+
+                array_push($tasksData, $taskData);
+            }
+
+            Task::insert($tasksData);
+
+            return response()->json(['message' => "Les tâches ont été ajoutées", 'date' => $tasksData], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+
+    /**
+     * Display the specified resource.'
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
