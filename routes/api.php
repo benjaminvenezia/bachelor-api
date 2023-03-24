@@ -21,7 +21,7 @@ Route::post('/register', [AuthController::class, 'register']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::patch('/tasks/toggle/{task}', [TasksController::class, 'toggle_task']);
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);

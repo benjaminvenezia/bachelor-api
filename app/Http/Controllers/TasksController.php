@@ -106,6 +106,31 @@ class TasksController extends Controller
         }
     }
 
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function toggle_task(Request $request, Task $task)
+    {
+        try {
+            $groupId = Helper::getCurrentGroupId();
+
+            if ($groupId === $task->group_id) {
+                $task->update(['is_done' => (int)!$task->is_done]);
+
+                return new TasksResource($task);
+            } else {
+                return $this->error('', 'You are not authorized to make this request', 403);
+            }
+        } catch (\Exception $e) {
+            return $this->error('Update error', $e->getMessage(), 500);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
