@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('default_tasks', function (Blueprint $table) {
-            // $table->string('id');
             $table->id();
             $table->string('category');
             $table->string('title');
