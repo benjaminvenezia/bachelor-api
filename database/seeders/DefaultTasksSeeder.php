@@ -17,7 +17,7 @@ class DefaultTasksSeeder extends Seeder
     public function run()
     {
 
-        DB::table('default_tasks')->truncate();
+       // DB::table('default_tasks')->truncate();
 
         $defaultTasksKitchen = [
             [

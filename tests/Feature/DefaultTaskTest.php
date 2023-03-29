@@ -39,7 +39,6 @@ class DefaultTaskTest extends TestCase
                 "*" => ["id", "category", "title", "description", "reward", "path_icon_todo"]
             ]
         ]);
-       
     }
 
     public function test_fetched_defaults_task_types_are_corrects()
@@ -50,14 +49,14 @@ class DefaultTaskTest extends TestCase
 
         $response = $this->actingAs($user)->get('/api/default_tasks');
 
-        $response->assertJson(fn (AssertableJson $json) =>
+        $response->assertJson(
+            fn (AssertableJson $json) =>
             $json->whereType('data.0.id', 'integer')
                 ->whereType('data.0.category', 'string')
                 ->whereType('data.0.title', 'string')
                 ->whereType('data.0.description', 'string')
                 ->whereType('data.0.reward', 'integer')
                 ->whereType('data.0.path_icon_todo', 'string')
-    );
-     
+        );
     }
 }
