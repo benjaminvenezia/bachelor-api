@@ -37,7 +37,7 @@ class DefaultTaskTest extends TestCase
 
         $response->assertJsonStructure([
             "data" => [
-                0 => ["id", "category", "title", "description", "reward", "path_icon_todo"]
+                "*" => ["id", "category", "title", "description", "reward", "path_icon_todo"]
             ]
         ]);
     }
