@@ -8,8 +8,7 @@ use Tests\TestCase;
 
 class DefaultTaskTest extends TestCase
 {
-
-    public function test_fetched_defaults_task_are_correctly_fetched()
+    public function test_fetched_defaults_task_are_correctly_fetched_when_authenticated()
     {
         $this->withoutExceptionHandling();
 
@@ -19,6 +18,13 @@ class DefaultTaskTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(1, count($response->json()));
+    }
+
+    public function test_fetched_defaults_task_route_return_unauthenticated_without_token()
+    {
+        $this->withoutExceptionHandling();
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->getJson('/api/default_tasks');
     }
 
     public function test_fetched_defaults_task_are_correctly_structured()
