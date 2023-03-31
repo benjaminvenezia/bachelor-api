@@ -14,7 +14,7 @@ class DefaultGageSeeder extends Seeder
      */
     public function run()
     {
-       // DB::table('default_gages')->truncate();
+        DB::table('default_gages')->truncate();
 
         $defaultGagesKitchen = [
             [
@@ -37,19 +37,33 @@ class DefaultGageSeeder extends Seeder
                 'title' => "Lancer la machine à laver la vaisselle",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
                 'cost' => 60,
+            ],
+            [
+                'id' => 4,
+                'category' => config('constants.KITCHEN'),
+                'title' => "Nettoyer les miettes sur la table",
+                'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
+                'cost' => 140,
+            ],
+            [
+                'id' => 5,
+                'category' => config('constants.KITCHEN'),
+                'title' => "Ranger les courses",
+                'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
+                'cost' => 60,
             ]
         ];
 
         $defaultGagesRoom = [
             [
-                'id' => 4,
+                'id' => 6,
                 'category' => config('constants.ROOM'),
                 'title' => "Une tâche liée à la chambre 1",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
                 'cost' => 100,
             ],
             [
-                'id' => 5,
+                'id' => 7,
                 'category' => config('constants.ROOM'),
                 'title' => "Une tâche liée à la chambre 2",
                 'description' => "La récompense de cette tâche sera à la hauteur de la peine.",
