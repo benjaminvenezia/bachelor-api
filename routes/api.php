@@ -28,10 +28,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);
-    // Route::get('/users/{code}', [UserController::class, 'findPartnerByCode']);
 
-    Route::post('/group/{idPartner}', [GroupController::class, 'setGroup']);
-    Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
+    Route::post('/group/{partnerCode}', [GroupController::class, 'setGroup']);
 
     Route::get('/default_tasks', [DefaultTaskController::class, 'get_all_defaults_tasks']);
     Route::get('/default_gages', [DefaultGageController::class, 'get_all_defaults_gages']);

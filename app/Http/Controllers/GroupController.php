@@ -15,35 +15,31 @@ class GroupController extends Controller
 
     use Helper;
 
-    /**
-     * Display a listing of the resource.
-     * à améliorer en utilisant helper...
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function getTheCurrentUserGroup()
-    {
-        $group =  GroupResource::collection(
-            Group::where('user_id1', Auth::user()->id)->get(),
-        );
-
-        if (count($group) == 0) {
-            $group =  GroupResource::collection(
-                Group::where('user_id2', Auth::user()->id)->get(),
-            );
-        }
-
-        return $group;
-    }
 
     /**
      * Create a group with the two user
      *
      * @return \Illuminate\Http\Response
      */
-    public function setGroup(Request $request, $idPartner)
+    public function setGroup($partnerCode)
     {
         $userId = Auth::user()->id;
+
+        try {
+            $idPartner = User::where('personal_code',  $partnerCode)->value('id');
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'Erreur lors de la récupération de l\'ID du partenaire: ' . $e->getMessage(),
+            ]);
+        }
+
+        if (!$idPartner) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Aucun utilisateur trouvé pour le code partenaire donné.',
+            ]);
+        }
 
         if (Group::where('user_id1', '=', $userId)->count() > 0 || Group::where('user_id2', '=', $idPartner)->count() > 0) {
             return response()->json([

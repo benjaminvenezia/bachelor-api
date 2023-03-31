@@ -21,12 +21,11 @@ class AuthController extends Controller
             return $this->error('', 'Vos identifiants ne correspondent pas', 401);
         }
 
-        //$user = User::where('email', $request->email)->first();
         $user = Auth::user();
 
-        if (Auth::user()->other_code === "") {
-            return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
-        }
+        // if (Auth::user()->other_code === "") {
+        //     return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
+        // }
 
         return $this->success([
             'user' => $user,
