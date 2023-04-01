@@ -15,6 +15,26 @@ class GroupController extends Controller
 
     use Helper;
 
+    /**
+     * Display a listing of the resource.
+     * à améliorer en utilisant helper...
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getTheCurrentUserGroup()
+    {
+        $group =  GroupResource::collection(
+            Group::where('user_id1', Auth::user()->id)->get(),
+        );
+
+        if (count($group) == 0) {
+            $group =  GroupResource::collection(
+                Group::where('user_id2', Auth::user()->id)->get(),
+            );
+        }
+
+        return $group;
+    }
 
     /**
      * Create a group with the two user

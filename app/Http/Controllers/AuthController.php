@@ -23,9 +23,9 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        // if (Auth::user()->other_code === "") {
-        //     return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
-        // }
+        if (Auth::user()->other_code === "") {
+            return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
+        }
 
         return $this->success([
             'user' => $user,
