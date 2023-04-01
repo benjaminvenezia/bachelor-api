@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,25 @@ class UserController extends Controller
     }
 
     /**
-     * Find an user by our other_code value
+     * get the current user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCurrentUser()
+    {
+
+        try {
+            $currentUser = Auth::user();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+
+        return response()->json(['code' => 200, 'currentUser' => $currentUser]);
+    }
+
+
+    /**
+     * get user by his personal_code
      *
      * @return \Illuminate\Http\Response
      */
@@ -38,9 +57,9 @@ class UserController extends Controller
             ]);
         }
 
-        $partner = User::where('personal_code', $code)->first();
+        $user = User::where('personal_code', $code)->first();
 
-        return $partner;
+        return $user;
     }
 
 

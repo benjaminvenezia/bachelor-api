@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);
+
+
+    Route::get('/users/get/get_current_user', [UserController::class, 'getCurrentUser']);
     Route::post('/group/{partnerCode}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 
