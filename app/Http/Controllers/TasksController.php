@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
-use App\Http\Resources\GroupResource;
 use App\Http\Resources\TasksResource;
-use App\Models\Group;
 use App\Models\Task;
 use App\Traits\Helper;
 use App\Traits\HttpResponses;
@@ -105,51 +103,39 @@ class TasksController extends Controller
     public function show(Task $task): JsonResponse
     {
         try {
+            if (Auth::user()->id !== $task->user_id) {
+                throw new Exception('You are not authorized to make this request', 403);
+            }
+
             $groupId = Helper::getCurrentGroupId();
 
             if ($groupId === $task->group_id) {
-                return $task;
-            } else {
-                return $this->isNotAuthorized($task);
+                return response()->json($task);
             }
+
+            return response()->json('Task not found', 404);
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Task $task)
+    public function update(StoreTaskRequest $request, Task $task): JsonResponse
     {
         try {
             $groupId = Helper::getCurrentGroupId();
 
             if ($groupId === $task->group_id) {
                 $task->update($request->all());
-
-                return new TasksResource($task);
+                return response()->json(new TasksResource($task));
             } else {
                 return $this->error('', 'You are not authorized to make this request', 403);
             }
         } catch (\Exception $e) {
-            return $this->error('Update error', $e->getMessage(), 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function toggle_task(Request $request, Task $task)
+    public function toggle_task(Task $task): JsonResponse
     {
         try {
             $groupId = Helper::getCurrentGroupId();
@@ -157,42 +143,30 @@ class TasksController extends Controller
             if ($groupId === $task->group_id) {
                 $task->update(['is_done' => (int)!$task->is_done]);
 
-                return new TasksResource($task);
+                return response()->json(new TasksResource($task));
             } else {
-                return $this->error('', 'You are not authorized to make this request', 403);
+                throw new \Exception('You are not authorized to make this request', 403);
             }
         } catch (\Exception $e) {
-            return $this->error('Update error', $e->getMessage(), 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Task $task)
+    public function destroy(Task $task): JsonResponse
     {
         try {
             $groupId = Helper::getCurrentGroupId();
 
             if ($groupId !== $task->group_id) {
-                return $this->error('', 'You are not authorized to make this request', 403);
+                throw new \Exception('You are not authorized to make this request', 403);
             }
 
             $task->delete();
 
-            return new TasksResource($task);
-        } catch (\Exception $e) {
-            return $this->error('', $e->getMessage(), 500);
-        }
-    }
+            return response()->json(new TasksResource($task));
 
-    private function isNotAuthorized($task)
-    {
-        if (Auth::user()->id !== $task->user_id) {
-            return $this->error('', 'You are not authorized to make this request', 403);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
     }
 }

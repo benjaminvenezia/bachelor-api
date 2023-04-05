@@ -12,7 +12,7 @@ class UserResource extends JsonResource
      * @var bool
      */
     public $preserveKeys = true;
-
+  
     /**
      * Transform the resource into an array.
      *

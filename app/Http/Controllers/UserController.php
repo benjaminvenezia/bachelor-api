@@ -2,87 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Group;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\HandlesDatabaseErrors;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $users =  UserResource::collection(
-            User::all(),
-        );
+   use HandlesDatabaseErrors;
 
-        return $users;
+    public function index(): JsonResponse
+    {
+        try {
+            $users =  UserResource::collection(
+                User::all(),
+            );
+
+            return response()->json($users);
+        } catch (Exception $e) {
+            
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
     }
 
-    /**
-     * get the current user
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getCurrentUser()
+    public function getCurrentUser(): JsonResponse
     {
-
         try {
             $currentUser = Auth::user();
+            return response()->json(['code' => 200, 'currentUser' => $currentUser]);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
-
-        return response()->json(['code' => 200, 'currentUser' => $currentUser]);
     }
 
-
-    /**
-     * get user by his personal_code
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $code)
+    //Cette méthode est certainement trop permissive (retourne email etc.)
+    public function show($code): JsonResponse
     {
-        if (User::where('personal_code', '=', $code)->count() === 0) {
-            return response()->json([
-                'code' => 403,
-                'message' => 'Erreur, ce code est rattaché a aucun utilisateur.',
-            ]);
+        try {
+            if (User::where('personal_code', '=', $code)->count() === 0) {
+                throw new \Exception('Erreur, ce code est rattaché a aucun utilisateur.', 403);
+            }
+
+            $user = User::where('personal_code', $code)->first();
+
+            return response()->json($user);
+            
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
-
-        $user = User::where('personal_code', $code)->first();
-
-        return $user;
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
+    public function update(StoreUserRequest $userRequest, User $user): JsonResponse
     {
-        if (Auth::user()->id !== $user->id) {
-            $errorHandling = [
-                'message' => "You are not authorized to make this request",
-                'code' => 403
-            ];
+        try {
+            if (Auth::user()->id !== $user->id) {
+                throw new \Exception('Vous n\'avez pas le droit de faire cette requête.', 403);
+            }
 
-            return json_encode($errorHandling);
+            $user->update($userRequest->validated());
+
+            return response()->json(new UserResource($user));
+            
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
-
-        $user->update($request->all());
-
-        return new UserResource($user);
     }
 }

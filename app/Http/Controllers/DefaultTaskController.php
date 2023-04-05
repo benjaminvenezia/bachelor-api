@@ -60,7 +60,7 @@ class DefaultTaskController extends Controller
         try {
             $defaultTask->update($taskRequest->validated());
 
-            return new DefaultTaskResource($defaultTask);
+            return response()->json(new DefaultTaskResource($defaultTask));
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
@@ -70,7 +70,7 @@ class DefaultTaskController extends Controller
     {
         try {
             $defaultTask->delete();
-            return new DefaultTaskResource($defaultTask);
+            return response()->json(new DefaultTaskResource($defaultTask));
         }catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }

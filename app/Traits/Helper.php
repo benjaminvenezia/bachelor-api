@@ -5,9 +5,11 @@ namespace App\Traits;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\HandlesDatabaseErrors;
 
 /**
  * This trait is used to when printing the requests.
@@ -20,7 +22,7 @@ trait Helper
      *
      * @return integer|string
      */
-    static function getCurrentGroupId(): int|string
+    static function getCurrentGroupId(): int|string|null
     {
         $group = GroupResource::collection(
             Group::where('user_id1', Auth::user()->id)->get(),
@@ -39,34 +41,36 @@ trait Helper
         }
     }
 
-    static function getCurrentPartner()
+    static function getCurrentPartner(): JsonResponse
     {
         try {
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
 
-            return $partner;
+            return response()->json($partner);
         } catch (ModelNotFoundException $e) {
-            return new JsonResponse([
-                'message' => 'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.'
-            ]);
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500,'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.');
         }
     }
 
-    static function getPartnerId(): int|null
+    static function getPartnerId(): int|null|JsonResponse
     {
         try {
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
-
-
             return $partner->id;
-        } catch (ModelNotFoundException $e) {
-            return null;
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500,'Une erreur est suvenur lors de la tentative vous lier à votre partenaire.');
         }
     }
 
-    static function getUserId(): int
+    static function getUserId(): int|JsonResponse
     {
-        $userId = Auth::user()->id;
-        return $userId;
+        try {
+            $userId = Auth::user()->id;
+            return $userId;
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'Une erreur est suvenur lors de la tentative vous lier à votre partenaire.');
+        }
+        
+        
     }
 }

@@ -53,11 +53,12 @@ class GagesController extends Controller
                     'year' => $gageRequest->year,
                     'user_id' => $partnerId,
                 ]);
+
             } else {
                 throw new \Exception('Impossible de créer un gage car aucun partenaire n\'a été trouvé pour l\'utilisateur actuellement authentifié.');
             }
-    
-            return new GageResource($gage);
+            
+            return response()->json(new GageResource($gage));
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, 500, $e->getMessage());
         }

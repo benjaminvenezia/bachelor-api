@@ -52,7 +52,7 @@ class DefaultGageController extends Controller
     {
         try {
             $defaultGage->update($defaultGageRequest->validated());
-            return new DefaultGageResource($defaultGage);
+            return response()->json(new DefaultGageResource($defaultGage));
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
@@ -62,7 +62,7 @@ class DefaultGageController extends Controller
     {
         try {
             $defaultGage->delete();
-            return new DefaultGageResource($defaultGage);
+            return response()->json(new DefaultGageResource($defaultGage));
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
