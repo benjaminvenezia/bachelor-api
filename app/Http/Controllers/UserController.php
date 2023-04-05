@@ -31,8 +31,13 @@ class UserController extends Controller
     public function getCurrentUser(): JsonResponse
     {
         try {
-            $currentUser = Auth::user();
-            return response()->json(['code' => 200, 'currentUser' => $currentUser]);
+            $user = Auth::user();
+
+            if (!$user) {
+                throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
+            }
+
+            return response()->json(['code' => 200, 'currentUser' => $user]);
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
@@ -58,6 +63,10 @@ class UserController extends Controller
     public function update(StoreUserRequest $userRequest, User $user): JsonResponse
     {
         try {
+            if (!Auth::user()) {
+                throw new \Exception('Erreur lors de la mise à jour de l\'utilisateur: l\'utilisateur est non connecté.', 400);
+            }
+
             if (Auth::user()->id !== $user->id) {
                 throw new \Exception('Vous n\'avez pas le droit de faire cette requête.', 403);
             }

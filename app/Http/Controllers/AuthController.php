@@ -6,6 +6,8 @@ use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use App\Traits\HandlesDatabaseErrors;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,50 +15,74 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     use HttpResponses;
+    use HandlesDatabaseErrors;
 
     public function login(LoginUserRequest $request): JsonResponse
     {
-        $request->validated($request->all());
+        try {
+            $request->validated($request->all());
 
-        if (!Auth::attempt($request->only(['email', 'password']))) {
-            return $this->error('', 'Vos identifiants ne correspondent pas', 401);
+            if (!Auth::attempt($request->only(['email', 'password']))) {
+                throw new Exception('Vos identifiants ne correspondent pas', 401);
+            }
+
+            $user = Auth::user();
+
+            if(!$user) {
+                throw new Exception('Vous devez vous authentifier', 401);
+            }
+
+            if ($user->other_code === "") {
+                throw new Exception('Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 403);
+            }
+
+            return $this->success([
+                'user' => $user,
+                'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken,
+            ]);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
-
-        $user = Auth::user();
-
-        if (Auth::user()->other_code === "") {
-            return $this->error('', 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 401);
-        }
-
-        return $this->success([
-            'user' => $user,
-            'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken,
-        ]);
     }
 
     public function register(StoreUserRequest $request): JsonResponse
     {
-        $request->validated($request->all());
+        try {
+            $request->validated($request->all());
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'personal_code' => $request->personal_code
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'personal_code' => $request->personal_code
+            ]);
 
-        return $this->success([
-            'user' => $user,
-            'token' => $user->createToken('API Token of ' . $user->name)->plainTextToken
-        ]);
+            return $this->success([
+                'user' => $user,
+                'token' => $user->createToken('API Token of ' . $user->name)->plainTextToken
+            ]);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
     }
 
     public function logout(): JsonResponse
-    {
-        Auth::user()->currentAccessToken()->delete();
+    {   
+        try {
+            $user = Auth::user();
 
-        return $this->success([
-            'message' => 'You have been successfully been logged out and your token has been deleted',
-        ]);
+            if (!$user) {
+                throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
+            }
+    
+            $user->currentAccessToken()->delete();
+    
+            return $this->success([
+                'message' => 'You have been successfully been logged out and your token has been deleted',
+            ]);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
+      
     }
 }

@@ -38,12 +38,22 @@ class TasksController extends Controller
     public function store(StoreTaskRequest $storeTaskrequest): JsonResponse
     {
         try {
+            $user = Auth::user();
+
+            if (!$user) {
+                throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
+            }
+
             $groupId = Helper::getCurrentGroupId();
+
+            if (!$groupId) {
+                throw new Exception('Le groupe n\'a pas été trouvé', 404);
+            }
 
             $task = Task::create([
                 'id' => $storeTaskrequest->id,
                 'group_id' => $groupId,
-                'user_id' => Auth::user()->id,
+                'user_id' => $user->id,
                 'title' => $storeTaskrequest->title,
                 'description' => $storeTaskrequest->description,
                 'category' => $storeTaskrequest->category,
@@ -103,7 +113,15 @@ class TasksController extends Controller
     public function show(Task $task): JsonResponse
     {
         try {
-            if (Auth::user()->id !== $task->user_id) {
+            $user = Auth::user();
+
+            if (!$user) {
+                throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
+            }
+
+           $groupId = Helper::getCurrentGroupId();
+
+            if ($groupId !== $task->group_id) {
                 throw new Exception('You are not authorized to make this request', 403);
             }
 

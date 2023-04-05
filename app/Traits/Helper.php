@@ -22,55 +22,73 @@ trait Helper
      *
      * @return integer|string
      */
-    static function getCurrentGroupId(): int|string|null
+    static function getCurrentGroupId(): int|string|null|JsonResponse
     {
-        $group = GroupResource::collection(
-            Group::where('user_id1', Auth::user()->id)->get(),
-        );
+        try {
 
-        if (count($group) == 0) {
+            if (!Auth::user()) {
+                throw new Exception('Erreur lors de la récupération de l\'identifiant du groupe : l\'utiliseur n\'est pas connecté.');
+            }
+
             $group = GroupResource::collection(
-                Group::where('user_id2', Auth::user()->id)->get(),
+                Group::where('user_id1', Auth::user()->id)->get(),
             );
-        }
 
-        if (count($group) > 0) {
-            return $group[0]->id;
-        } else {
-            return null;
+            if (count($group) == 0) {
+                $group = GroupResource::collection(
+                    Group::where('user_id2', Auth::user()->id)->get(),
+                );
+            }
+
+            if (count($group) > 0) {
+                return $group[0]->id;
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'L\'identifiant du group n\'a pas pu être récupéré.');
         }
     }
 
     static function getCurrentPartner(): JsonResponse
     {
         try {
+            if (!Auth::user()) {
+                throw new Exception('Erreur lors de la récupération du partenaire : l\'utiliseur n\'est pas connecté.');
+            }
+
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
 
             return response()->json($partner);
         } catch (ModelNotFoundException $e) {
-            return HandlesDatabaseErrors::handleDatabaseError($e, 500,'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.');
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.');
         }
     }
 
     static function getPartnerId(): int|null|JsonResponse
     {
         try {
+            if (!Auth::user()) {
+                throw new Exception('Erreur lors de la récupération de l\'identifiant du partenaire : l\'utiliseur n\'est pas connecté.');
+            }
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
             return $partner->id;
         } catch (Exception $e) {
-            return HandlesDatabaseErrors::handleDatabaseError($e, 500,'Une erreur est suvenur lors de la tentative vous lier à votre partenaire.');
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'Une erreur est suvenur lors de la tentative vous lier à votre partenaire.');
         }
     }
 
     static function getUserId(): int|JsonResponse
     {
         try {
+            if (!Auth::user()) {
+                throw new Exception('Erreur lors de la récupération de l\'identifiant de l\'utilisateur : l\'utiliseur n\'est pas connecté.');
+            }
+
             $userId = Auth::user()->id;
             return $userId;
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'Une erreur est suvenur lors de la tentative vous lier à votre partenaire.');
         }
-        
-        
     }
 }
