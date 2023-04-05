@@ -13,7 +13,7 @@ parameters:
         - 'app/Http/Resources'
 
     # The level 9 is the highest level
-    level: 8
+    level: 9
 
     ignoreErrors:
        
