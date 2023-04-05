@@ -23,3 +23,8 @@ When you clone the git repo you must follow these steps to run the project:
 php artisan make:controller DefaultGageController --api --model=DefaultTask
 php artisan db:seed --class=DefaultTasksSeeder
 php artisan db:seed --class=DefaultGageSeeder
+
+# phpstan 
+ ./vendor/bin/phpstan analyse app --memory-limit=999999999999
+
+ - configuration is present in phpstan.neon file.
