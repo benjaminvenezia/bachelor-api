@@ -6,6 +6,7 @@ use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\User;
 use App\Traits\Helper;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,7 @@ class GroupController extends Controller
 
     use Helper;
 
-    /**
-     * Display a listing of the resource.
-     * à améliorer en utilisant helper...
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function getTheCurrentUserGroup()
+    public function getTheCurrentUserGroup(): JsonResponse
     {
         $group =  GroupResource::collection(
             Group::where('user_id1', Auth::user()->id)->get(),
@@ -33,7 +28,8 @@ class GroupController extends Controller
             );
         }
 
-        return $group;
+
+        return response()->json($group);
     }
 
     /**
@@ -41,12 +37,17 @@ class GroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     //a refacto pour bien catcher les erreurs etc.
     public function setGroup($partnerCode)
     {
         $userId = Auth::user()->id;
 
         try {
             $idPartner = User::where('personal_code',  $partnerCode)->value('id');
+
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,

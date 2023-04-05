@@ -2,118 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
 use App\Http\Resources\DefaultTaskResource;
-
 use App\Models\DefaultTask;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Traits\HandlesDatabaseErrors;
 
 class DefaultTaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function get_all_defaults_tasks()
+    use HandlesDatabaseErrors;
+
+    public function get_all_defaults_tasks(): JsonResponse
     {
         try {
             $defaultTasks = DefaultTaskResource::collection(
                 DefaultTask::all(),
             );
 
-            return $defaultTasks;
+            return response()->json(['data' => $defaultTasks]);
         } catch (\Exception $e) {
-            $errorMessage = 'Une erreur s\'est produite lors de la récupération des données.';
-            $errorCode = 500;
-
-            if ($e instanceof \Illuminate\Database\QueryException) {
-                $errorMessage = 'Une erreur s\'est produite lors de l\'exécution de la requête SQL.';
-                $errorCode = 400;
-            }
-
-            return response()->json(['error' => $errorMessage, 'details' => $e->getMessage()], $errorCode);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-
-      /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store_default_task(Request $request)
+    public function store_default_task(StoreTaskRequest $taskRequest): JsonResponse
     {
         try {
-            $defaultTask = DefaultTask::create([
-                'id' => $request->id,
-                'title' => $request->title,
-                'description' => $request->description,
-                'category' => $request->category,
-                'reward' => $request->reward,
-                'path_icon_todo' => $request->path_icon_todo,
+            $validatedData = $taskRequest->validated();
+
+            $defaultTasks = DefaultTask::create([
+                'id' => $validatedData['id'],
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'category' => $validatedData['category'],
+                'reward' => $validatedData['reward'],
+                'path_icon_todo' => $validatedData['path_icon_todo'],
             ]);
 
-            return $defaultTask;
+            return response()->json($defaultTasks);
         } catch (\Exception $e) {
-            $errorMessage = 'Une erreur s\'est produite lors de la création de la tâche par défaut.';
-            $errorCode = 500;
-
-            if ($e instanceof \Illuminate\Database\QueryException) {
-                $errorMessage = 'Une erreur s\'est produite lors de l\'exécution de la requête SQL.';
-                $errorCode = 400;
-            }
-
-            return response()->json(['error' => $errorMessage, 'details' => $e->getMessage()], $errorCode);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DefaultTask  $defaultTask
-     * @return \Illuminate\Http\Response
-     */
-    public function show_default_task(DefaultTask $defaultTask)
+
+    public function show_default_task(DefaultTask $defaultTask): JsonResponse
     {
         try {
-            return $defaultTask;
+            return response()->json($defaultTask);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DefaultTask  $defaultTask
-     * @return \Illuminate\Http\Response
-     */
-    public function update_default_task(Request $request, DefaultTask $defaultTask)
+    public function update_default_task(StoreTaskRequest $taskRequest, DefaultTask $defaultTask): JsonResponse
     {
         try {
-            $defaultTask->update($request->all());
+            $defaultTask->update($taskRequest->validated());
 
             return new DefaultTaskResource($defaultTask);
         } catch (\Exception $e) {
-            return $this->error('Update error', $e->getMessage(), 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\DefaultTask  $defaultTask
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy_default_task(DefaultTask $defaultTask)
+    public function destroy_default_task(DefaultTask $defaultTask): JsonResponse
     {
         try {
             $defaultTask->delete();
             return new DefaultTaskResource($defaultTask);
-        } catch (\Exception $e) {
-            return $this->error('destroy error', $e->getMessage(), 500);
+        }catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 }

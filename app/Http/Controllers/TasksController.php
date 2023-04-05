@@ -9,7 +9,9 @@ use App\Models\Group;
 use App\Models\Task;
 use App\Traits\Helper;
 use App\Traits\HttpResponses;
+use App\Traits\HandlesDatabaseErrors;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -18,58 +20,49 @@ class TasksController extends Controller
 {
     use HttpResponses;
     use Helper;
+    use HandlesDatabaseErrors;
 
-    /**
-     * Display a listing of the resource.
-     * Retourne toutes les tâches pour le groupe actuel
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        $groupId = Helper::getCurrentGroupId();
+        try {
+            $groupId = Helper::getCurrentGroupId();
 
-        $tasks = TasksResource::collection(
-            Task::where('group_id', $groupId)->get(),
-        );
+            $tasks = TasksResource::collection(
+                Task::where('group_id', $groupId)->get(),
+            );
 
-        return $tasks;
+            return response()->json($tasks);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTaskRequest $request)
+    public function store(StoreTaskRequest $storeTaskrequest): JsonResponse
     {
-        $request->validated($request->all());
+        try {
+            $groupId = Helper::getCurrentGroupId();
 
-        $groupId = Helper::getCurrentGroupId();
+            $task = Task::create([
+                'id' => $storeTaskrequest->id,
+                'group_id' => $groupId,
+                'user_id' => Auth::user()->id,
+                'title' => $storeTaskrequest->title,
+                'description' => $storeTaskrequest->description,
+                'category' => $storeTaskrequest->category,
+                'reward' => $storeTaskrequest->reward,
+                'is_done' => $storeTaskrequest->is_done,
+                'path_icon_todo' => $storeTaskrequest->path_icon_todo,
+                'associated_day' => $storeTaskrequest->associated_day
+            ]);
 
-        $task = Task::create([
-            'id' => $request->id,
-            'group_id' => $groupId,
-            'user_id' => Auth::user()->id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'category' => $request->category,
-            'reward' => $request->reward,
-            'is_done' => $request->is_done,
-            'path_icon_todo' => $request->path_icon_todo,
-            'associated_day' => $request->associated_day
-        ]);
-
-        return new TasksResource($task);
+            $resource = new TasksResource($task);
+            return response()->json($resource);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store_multiple(Request $request)
+    public function store_multiple(Request $request): JsonResponse
     {
         try {
             $groupId = Helper::getCurrentGroupId();
@@ -105,18 +98,11 @@ class TasksController extends Controller
 
             return response()->json(['message' => "Les tâches ont été ajoutées", 'date' => $tasksData], 200);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-
-    /**
-     * Display the specified resource.'
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
+    public function show(Task $task): JsonResponse
     {
         try {
             $groupId = Helper::getCurrentGroupId();
@@ -127,7 +113,7 @@ class TasksController extends Controller
                 return $this->isNotAuthorized($task);
             }
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 

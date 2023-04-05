@@ -2,111 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DefaultGageRequest;
 use App\Http\Resources\DefaultGageResource;
 use App\Models\DefaultGage;
-use Illuminate\Http\Request;
+use App\Traits\HandlesDatabaseErrors;
+use Illuminate\Http\JsonResponse;
 
 class DefaultGageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function get_all_defaults_gages()
+    use HandlesDatabaseErrors;
+
+    public function get_all_defaults_gages(): JsonResponse
     {
         try {
             $defaultGages = DefaultGage::all();
-            return $defaultGages;
+            return response()->json($defaultGages);
         } catch (\Exception $e) {
-            $errorMessage = 'Une erreur s\'est produite lors de la récupération des données.';
-            $errorCode = 500;
-
-            if ($e instanceof \Illuminate\Database\QueryException) {
-                $errorMessage = 'Une erreur s\'est produite lors de l\'exécution de la requête SQL.';
-                $errorCode = 400;
-            }
-            return response()->json(['error' => $errorMessage, 'details' => $e->getMessage()], $errorCode);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store_default_gage(Request $request)
+    public function store_default_gage(DefaultGageRequest $defaultgageRequest): JsonResponse
     {
         try {
             $defaultGage = DefaultGage::create([
-                'id' => $request->id,
-                'title' => $request->title,
-                'description' => $request->description,
-                'category' => $request->category,
-                'cost' => $request->cost,
+                'id' => $defaultgageRequest->id,
+                'title' => $defaultgageRequest->title,
+                'description' => $defaultgageRequest->description,
+                'category' => $defaultgageRequest->category,
+                'cost' => $defaultgageRequest->cost,
             ]);
 
-            return $defaultGage;
+            return response()->json($defaultGage);
         } catch (\Exception $e) {
-            $errorMessage = 'Une erreur s\'est produite lors de la création du gage par défaut.';
-            $errorCode = 500;
-
-            if ($e instanceof \Illuminate\Database\QueryException) {
-                $errorMessage = 'Une erreur s\'est produite lors de l\'exécution de la requête SQL.';
-                $errorCode = 400;
-            }
-
-            return response()->json(['error' => $errorMessage, 'details' => $e->getMessage()], $errorCode);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DefaultGage  $defaultGage
-     * @return \Illuminate\Http\Response
-     */
-    public function show_default_gage(DefaultGage $defaultGage)
+    public function show_default_gage(DefaultGage $defaultGage): JsonResponse
     {
         try {
-            return $defaultGage;
+            return response()->json($defaultGage);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DefaultGage  $defaultGage
-     * @return \Illuminate\Http\Response
-     */
-    public function update_default_gage(Request $request, DefaultGage $defaultGage)
+    public function update_default_gage(DefaultGageRequest $defaultGageRequest, DefaultGage $defaultGage): JsonResponse
     {
         try {
-            $defaultGage->update($request->all());
-
+            $defaultGage->update($defaultGageRequest->validated());
             return new DefaultGageResource($defaultGage);
         } catch (\Exception $e) {
-            return $this->error('Update error', $e->getMessage(), 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 
-      /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\DefaultGage  $defaultGage
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy_default_gage(DefaultGage $defaultGage)
+    public function destroy_default_gage(DefaultGage $defaultGage): JsonResponse
     {
         try {
             $defaultGage->delete();
             return new DefaultGageResource($defaultGage);
         } catch (\Exception $e) {
-            return $this->error('destroy error', $e->getMessage(), 500);
+            return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
 }
