@@ -39,7 +39,7 @@ class UserController extends Controller
     }
 
     //Cette méthode est certainement trop permissive (retourne email etc.)
-    public function show($code): JsonResponse
+    public function show(string $code): JsonResponse
     {
         try {
             if (User::where('personal_code', '=', $code)->count() === 0) {

@@ -33,7 +33,7 @@ class GroupController extends Controller
         return response()->json($group);
     }
 
-    public function setGroup($partnerCode): JsonResponse
+    public function setGroup(string $partnerCode): JsonResponse
     {
         try {
             $userId = Auth::user()->id;
@@ -67,7 +67,7 @@ class GroupController extends Controller
                 'code' => 200,
                 'message' => 'Groupe crée avec succès!',
             ]);
-            
+
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
