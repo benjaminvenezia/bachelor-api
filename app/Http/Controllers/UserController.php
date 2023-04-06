@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
@@ -12,7 +13,7 @@ use App\Traits\HandlesDatabaseErrors;
 
 class UserController extends Controller
 {
-   use HandlesDatabaseErrors;
+    use HandlesDatabaseErrors;
 
     public function index(): JsonResponse
     {
@@ -23,7 +24,7 @@ class UserController extends Controller
 
             return response()->json($users);
         } catch (Exception $e) {
-            
+
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }
@@ -37,7 +38,7 @@ class UserController extends Controller
                 throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
             }
 
-            return response()->json(['code' => 200, 'currentUser' => $user]);
+            return response()->json($user);
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
@@ -54,13 +55,12 @@ class UserController extends Controller
             $user = User::where('personal_code', $code)->first();
 
             return response()->json($user);
-            
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
     }
 
-    public function update(StoreUserRequest $userRequest, User $user): JsonResponse
+    public function update(UserRequest $userRequest, User $user): JsonResponse
     {
         try {
             if (!Auth::user()) {
@@ -74,7 +74,6 @@ class UserController extends Controller
             $user->update($userRequest->validated());
 
             return response()->json(new UserResource($user));
-            
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }
