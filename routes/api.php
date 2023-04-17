@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultGageController;
+use App\Http\Controllers\DefaultHabitsController;
 use App\Http\Controllers\DefaultTaskController;
 use App\Http\Controllers\GagesController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HabitsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -28,12 +30,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tasks', TasksController::class);
     Route::resource('/gages', GagesController::class);
     Route::resource('/users', UserController::class);
-
+    Route::resource('/habits', HabitsController::class);
 
     Route::get('/users/get/get_current_user', [UserController::class, 'getCurrentUser']);
     Route::post('/group/{partnerCode}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 
+    Route::resource('/default_habits', DefaultHabitsController::class);
     Route::get('/default_tasks', [DefaultTaskController::class, 'get_all_defaults_tasks']);
     Route::get('/default_gages', [DefaultGageController::class, 'get_all_defaults_gages']);
 
