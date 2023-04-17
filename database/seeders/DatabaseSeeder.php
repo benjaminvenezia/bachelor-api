@@ -17,34 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
-        $usersToAdd = [
-            [
-                'id' => 1,
-                'name' => "Thierry",
-                'personal_code' => 'aaa',
-                'other_code' => 'bbb',
-                'email' => "ben@gmail.com",
-                'password' => Hash::make("password"),
-                'points' => 0,
-            ],
-            [
-                'id' => 2,
-                'name' => "Marjorie",
-                'personal_code' => 'bbb',
-                'other_code' => 'aaa',
-                'email' => "noemi@gmail.com",
-                'password' => Hash::make("password"),
-                'points' => 0,
-            ]
-        ];
-
-        DB::table('users')->insert($usersToAdd);
-
-        // Gage::factory()->count(5)->create();
-
-        // Group::factory()->count(1)->create();
-
-        // Task::factory()->count(20)->create();
+        $this->call([
+            DefaultGageSeeder::class,
+            DefaultHabitsSeeder::class,
+            DefaultTasksSeeder::class
+        ]);
     }
 }
