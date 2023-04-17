@@ -24,8 +24,6 @@ class DefaultHabitsSeeder extends Seeder
                 'description' => "Il semblerait que votre partenaire vous ait pris en flagrant délit de laissage de pourriture dans l'évier.",
                 'cost' => '["10", "20", "50"]',
             ],
-
-
         ];
 
         DB::table('default_habits')->insert($defaultHabits);

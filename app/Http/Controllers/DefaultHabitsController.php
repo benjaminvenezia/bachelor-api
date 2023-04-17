@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DefaultHabit;
 use Illuminate\Http\Request;
+use App\Traits\HandlesDatabaseErrors;
 
 class DefaultHabitsController extends Controller
 {
+    use HandlesDatabaseErrors;
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +16,12 @@ class DefaultHabitsController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $defaultHabits = DefaultHabit::all();
+            return response()->json(['data' => $defaultHabits]);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e);
+        }
     }
 
     /**

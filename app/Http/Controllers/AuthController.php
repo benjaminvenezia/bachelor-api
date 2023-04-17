@@ -28,7 +28,7 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            if(!$user) {
+            if (!$user) {
                 throw new Exception('Vous devez vous authentifier', 401);
             }
 
@@ -67,22 +67,21 @@ class AuthController extends Controller
     }
 
     public function logout(): JsonResponse
-    {   
+    {
         try {
             $user = Auth::user();
 
             if (!$user) {
                 throw new Exception('L\'utilisateur n\'est pas authentifié', 401);
             }
-    
+
             $user->currentAccessToken()->delete();
-    
+
             return $this->success([
                 'message' => 'You have been successfully been logged out and your token has been deleted',
             ]);
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
-      
     }
 }
