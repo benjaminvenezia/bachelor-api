@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('default_habits', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
             $table->string('title');
+            $table->string('category');
             $table->string('description');
-            $table->json('cost');
+            $table->string('path_icon');
         });
     }
 

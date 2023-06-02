@@ -27,17 +27,25 @@ class AuthController extends Controller
             }
 
             $user = Auth::user();
+            $message = '';
+            $code = null;
 
             if (!$user) {
                 throw new Exception('Vous devez vous authentifier', 401);
+                $message = 'Vous devez vous authentifier';
+                $code = 401;
             }
 
             if ($user->other_code === "") {
-                throw new Exception('Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 403);
+                $message = 'Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil';
+                $code = 403;
+                // throw new Exception('Vous devez vous lier à votre partenaire avant d\'accéder à la page d\'accueil', 403);
             }
 
             return $this->success([
                 'user' => $user,
+                'code' => $code,
+                'message' => $message,
                 'token' => $user->createToken('Api Token of ' . $user->name)->plainTextToken,
             ]);
         } catch (\Exception $e) {
