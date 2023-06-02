@@ -46,7 +46,6 @@ class GroupController extends Controller
     public function setGroup(string $partnerCode): JsonResponse
     {
         try {
-        
             $user = Auth::user();
 
             if (!$user) {
@@ -56,33 +55,42 @@ class GroupController extends Controller
             $userId = $user->id;
             $idPartner = User::where('personal_code',  $partnerCode)->value('id');
 
+            $code = 200;
+            $message = 'Le groupe a été crée avec succès.';
+
             if (!$idPartner) {
-                throw new Exception('Aucun utilisateur trouvé pour le code partenaire donné.', 404);
+                $message = 'Aucun utilisateur trouvé pour le code partenaire donné.';
+                $code = 404;
             }
 
             if (Group::where('user_id1', '=', $userId)->count() > 0 || Group::where('user_id2', '=', $idPartner)->count() > 0) {
-                throw new Exception('Erreur, un des deux utilisateurs est déjà dans un groupe.', 403);
+                $message = 'Erreur, un des deux utilisateurs est déjà dans un groupe.';
+                $code = 403;
             }
+
 
             if ($idPartner == $userId) {
-                throw new Exception('Vous ne pouvez composer un group avec vous même.', 403);
+                $message = 'Vous ne pouvez composer un group avec vous même.';
+                $code = 403;
             }
 
-            $partnerToModify = User::find($idPartner);
-            User::where('id', $idPartner)->update(['other_code' => $user->personal_code]);
-            User::where('id', $userId)->update(['other_code' => $partnerToModify->personal_code]);
+            if ($code == 200) {
+                $partnerToModify = User::find($idPartner);
+                User::where('id', $idPartner)->update(['other_code' => $user->personal_code]);
+                User::where('id', $userId)->update(['other_code' => $partnerToModify->personal_code]);
 
-            //--------
-            $group = new Group();
-            $group->user_id1 = $userId;
-            $group->user_id2 = $idPartner;
-            $group->name = "Les petits nettoyeurs";
+                //--------
+                $group = new Group();
+                $group->user_id1 = $userId;
+                $group->user_id2 = $idPartner;
+                $group->name = "Les petits nettoyeurs";
 
-            $group->save();
+                $group->save();
+            }
 
             return response()->json([
-                'code' => 200,
-                'message' => 'Groupe crée avec succès!',
+                'code' => $code,
+                'message' => $message,
             ]);
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
