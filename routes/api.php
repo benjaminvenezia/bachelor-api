@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/group/{partnerCode}', [GroupController::class, 'setGroup']);
     Route::get('/group', [GroupController::class, 'getTheCurrentUserGroup']);
 
+    Route::post('/gage/validate/{gageId}', [GagesController::class, 'validate_gage']);
+
     Route::resource('/default_habits', DefaultHabitsController::class);
     Route::get('/default_tasks', [DefaultTaskController::class, 'get_all_defaults_tasks']);
     Route::get('/default_gages', [DefaultGageController::class, 'get_all_defaults_gages']);

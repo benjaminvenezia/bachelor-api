@@ -36,9 +36,9 @@ class GagesController extends Controller
     {
         try {
             $gageRequest->validated($gageRequest->all());
-    
+
             $partnerId = Helper::getPartnerId();
-    
+
             if ($partnerId !== null) {
                 $gage = Gage::create([
                     'id' => $gageRequest->id,
@@ -53,22 +53,32 @@ class GagesController extends Controller
                     'year' => $gageRequest->year,
                     'user_id' => $partnerId,
                 ]);
-
             } else {
                 throw new \Exception('Impossible de créer un gage car aucun partenaire n\'a été trouvé pour l\'utilisateur actuellement authentifié.');
             }
-            
+
             return response()->json(new GageResource($gage));
         } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, 500, $e->getMessage());
         }
     }
-    
 
-    // public function show(Gage $gage): JsonResponse
-    // {
-    //     //
-    // }
+    public function validate_gage($Idgage): JsonResponse
+    {
+        try {
+            $gage = Gage::findOrFail($Idgage);
+            $gage->is_done = true;
+            $gage->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Gage validated successfully.',
+                'gage' => $gage
+            ]);
+        } catch (\Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, 500, $e->getMessage());
+        }
+    }
 
 
     // public function update(Request $request, Gage $gage): JsonResponse
