@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('other_code');
             $table->string('name');
             $table->integer('points');
+            $table->integer('points_gage');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

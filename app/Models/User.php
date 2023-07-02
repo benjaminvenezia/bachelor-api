@@ -33,7 +33,8 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'other_code' => '',
-        'points' => 0
+        'points' => 0,
+        'points_gage' => 0
     ];
 
     /**
@@ -45,6 +46,7 @@ class User extends Authenticatable
         'name',
         'email',
         'points',
+        'points_gage',
         'password',
         'other_code',
     ];
