@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,7 +18,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('sanctum:prune-expired --hours=24')->daily();
+        $schedule->call(function () {
+            //In user table reset all points to 0 and increment the points_gage by the delta from user1 and user2.
+            DB::table('users')->update([
+                'points' => 0,
+                // 'points_gage' => DB::raw('points_gage + (user1_points - user2_points)')
+            ]);
+
+            $response = Http::get('localhost:8000/api/user/distribute_gage_points/');
+            info($response);
+        })->everyMinute();
     }
 
     /**

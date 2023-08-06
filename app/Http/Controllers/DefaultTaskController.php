@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DefaultTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Resources\DefaultTaskResource;
 use App\Models\DefaultTask;
@@ -25,13 +26,12 @@ class DefaultTaskController extends Controller
         }
     }
 
-    public function store_default_task(StoreTaskRequest $taskRequest): JsonResponse
+    public function store_default_task(DefaultTaskRequest $taskRequest): JsonResponse
     {
         try {
             $validatedData = $taskRequest->validated();
 
             $defaultTasks = DefaultTask::create([
-                'id' => $validatedData['id'],
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'category' => $validatedData['category'],
@@ -71,7 +71,7 @@ class DefaultTaskController extends Controller
         try {
             $defaultTask->delete();
             return response()->json(new DefaultTaskResource($defaultTask));
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e);
         }
     }

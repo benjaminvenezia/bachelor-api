@@ -10,10 +10,14 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\HandlesDatabaseErrors;
+use App\Traits\Helper;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     use HandlesDatabaseErrors;
+    use Helper;
 
     public function index(): JsonResponse
     {
@@ -74,6 +78,53 @@ class UserController extends Controller
             $user->update($userRequest->validated());
 
             return response()->json(new UserResource($user));
+        } catch (Exception $e) {
+            return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
+        }
+    }
+
+    public function distribute_delta_points_to_winner(): JsonResponse
+    {
+        try {
+            /**
+             * @var User
+             */
+            $currentUser = Auth::user();
+            $otherUser = Helper::getCurrentPartner();
+
+            if (!$currentUser || !$otherUser) {
+                throw new ModelNotFoundException('User or partner not found.');
+            }
+
+            $delta = 0;
+
+            $pointsCurrentUser = $currentUser->points;
+            $pointsOtherUser = $otherUser->points;
+
+            if ($pointsCurrentUser > $pointsOtherUser) {
+                $delta = $pointsCurrentUser - $pointsOtherUser;
+                $currentUser->points += $delta;
+                $otherUser->points -= $delta;
+            } else {
+                $delta = $pointsOtherUser - $pointsCurrentUser;
+                $currentUser->points -= $delta;
+                $otherUser->points += $delta;
+            }
+
+            DB::beginTransaction();
+            try {
+                $currentUser->save();
+                $otherUser->save();
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+
+            return response()->json([
+                'message' => 'Points transferred successfully.',
+                'delta' => $delta
+            ]);
         } catch (Exception $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, $e->getCode(), $e->getMessage());
         }

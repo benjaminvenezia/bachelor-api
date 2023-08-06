@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/gage/validate/{gageId}', [GagesController::class, 'validate_gage']);
 
+    Route::get('/user/distribute_gage_points/', [UserController::class, 'distribute_delta_points_to_winner']);
+
     Route::resource('/default_habits', DefaultHabitsController::class);
     Route::get('/default_tasks', [DefaultTaskController::class, 'get_all_defaults_tasks']);
     Route::get('/default_gages', [DefaultGageController::class, 'get_all_defaults_gages']);

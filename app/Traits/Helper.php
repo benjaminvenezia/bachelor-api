@@ -50,7 +50,7 @@ trait Helper
         }
     }
 
-    static function getCurrentPartner(): JsonResponse
+    static function getCurrentPartner(): User
     {
         try {
             if (!Auth::user()) {
@@ -59,7 +59,7 @@ trait Helper
 
             $partner = User::where('personal_code', Auth::user()->other_code)->firstOrFail();
 
-            return response()->json($partner);
+            return $partner;
         } catch (ModelNotFoundException $e) {
             return HandlesDatabaseErrors::handleDatabaseError($e, 500, 'Erreur: Vous ne pouvez pas attribuer de gage car vous n\'êtes lié à aucun utilisateur. Cela ne devrait pas arriver, merci de contacter le développeur.');
         }
