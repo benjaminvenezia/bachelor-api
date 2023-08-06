@@ -13,7 +13,6 @@ class DefaultGage extends Model
         'title',
         'description',
         'category',
-        'cost',
     ];
 
     use HasFactory;

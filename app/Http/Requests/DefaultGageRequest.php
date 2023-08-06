@@ -13,7 +13,7 @@ class DefaultGageRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,6 @@ class DefaultGageRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required'],
             'title' => ['required', 'max:255'],
             'description' => ['required'],
             'category' => ['required'],

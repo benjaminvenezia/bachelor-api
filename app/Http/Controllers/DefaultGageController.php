@@ -22,7 +22,7 @@ class DefaultGageController extends Controller
         }
     }
 
-    public function store_default_gage(DefaultGageRequest $defaultgageRequest)
+    public function store_default_gage(DefaultGageRequest $defaultgageRequest): JsonResponse
     {
         try {
             $defaultGage = DefaultGage::create([
