@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultGageController;
 use App\Http\Controllers\DefaultHabitsController;
+use App\Http\Controllers\DefaultSuggestionController;
 use App\Http\Controllers\DefaultTaskController;
 use App\Http\Controllers\GagesController;
 use App\Http\Controllers\GroupController;
@@ -55,6 +56,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/default_gages', [DefaultGageController::class, 'store_default_gage']);
         Route::patch('/default_gages/{defaultGage}', [DefaultGageController::class, 'update_default_gage']);
         Route::delete('/default_gages/{defaultGage}', [DefaultGageController::class, 'destroy_default_gage']);
+
+        Route::post("/default_suggestions", [DefaultSuggestionController::class, 'store_default_suggestion']);
 
         Route::get('/group/count', [GroupController::class, 'get_total_groups']);
     });

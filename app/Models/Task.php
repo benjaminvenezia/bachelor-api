@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Symfony\Component\Console\Completion\Suggestion;
 
 class Task extends Model
 {
@@ -49,5 +52,10 @@ class Task extends Model
     public function group(): HasOne
     {
         return $this->hasOne(Group::class);
+    }
+
+    public function suggestions(): BelongsToMany
+    {
+        return $this->belongsToMany(Suggestion::class);
     }
 }
