@@ -1,32 +1,89 @@
-# Installation
+# Installation Guide
 
-# git commit convention
+Welcome to the installation guide for the bachelor-api. Follow these steps to set up and run the project successfully:
 
-[package] : packages
-[fix] : fix an error
-[func] : add a functionnality
-[doc] : documentation adding
+## Prerequisites
 
-# installation
+Before you proceed, ensure you have the following prerequisites:
 
-When you clone the git repo you must follow these steps to run the project:
+-   Node.js and npm (Node Package Manager) installed on your system.
+-   Git installed for cloning the repository.
+-   PHP 8.1
 
-1. Create a Database locally
-2. Rename .env.example file to .env inside your project root and fill the database information. (windows won't let you do it, so you have to open your console cd your project root directory and run mv .env.example .env )
-3. Open the console and cd your project root directory
-4. Run composer install
-5. Run php artisan key:generate
-6. Run php artisan migrate
-7. Run php artisan db:seed to run seeders, if any.
-8. Run php artisan serve
+## Installation Steps
 
-php artisan make:controller DefaultGageController --api --model=DefaultTask
-php artisan db:seed --class=DefaultTasksSeeder
-php artisan db:seed --class=DefaultGageSeeder
-php artisan db:seed --class=DefaultHabitsSeeder
+1. **Clone the Repository:** Start by cloning the git repository to your local machine using the following command:
 
-# phpstan
+    ```bash
+    git clone https://github.com/benjaminvenezia/bachelor-api.git
+    ```
 
-./vendor/bin/phpstan analyse app --memory-limit=999999999999
+2. **Database Setup:**
 
--   configuration is present in phpstan.neon file.
+    - Create a local MYSQL database
+
+3. **Environment Configuration:**
+
+    - Rename the `.env.example` file to `.env` in the root of your project.
+    - Open the `.env` file and fill in your database information.
+
+        ```
+        DB_HOST=your_database_host
+        DB_PORT=your_database_port
+        DB_DATABASE=your_database_name
+        DB_USERNAME=your_database_username
+        DB_PASSWORD=your_database_password
+        ```
+
+4. **Install Dependencies:**
+
+    - Open your console and navigate to your project's root directory.
+    - Run the following command to install the necessary dependencies:
+
+        ```bash
+        npm install
+        ```
+
+5. **Generate Application Key:**
+
+    - Run the following command to generate a unique application key:
+
+        ```bash
+        npm run key:generate
+        ```
+
+6. **Migrate Database:**
+
+    - Run the migrations to set up the database schema:
+
+        ```bash
+        npm run migrate
+        ```
+
+    - If there are seeders, you can run them using:
+
+        ```bash
+        npm run db:seed
+        ```
+
+7. **Run the Development Server:**
+
+    - Launch the development server using:
+
+        ```bash
+        npm run serve
+        ```
+
+    - This will start the development server, and you'll be able to access the app in your browser at the provided local development URL (usually `http://localhost:3000`).
+
+## Additional Commands
+
+-   **Run phpstan Analysis:**
+
+    -   To perform PHPStan static analysis on the app, use:
+
+        ```bash
+        ./vendor/bin/phpstan analyse app --memory-limit=999999999999
+        ```
+
+    -   Configuration for PHPStan is located in the `phpstan.neon` file.
